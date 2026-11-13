@@ -16,6 +16,7 @@ Backend en Node.js + Express 5 + Sequelize, con MySQL 8.4 ejecutándose en Docke
 | Contenedor de BD | Docker Compose |
 | Frontend | HTML + CSS estático (`index.html`, `mascotas.html`, `mascota.html`) |
 | Hash de contraseñas | bcrypt / bcryptjs |
+| Documentación | OpenAPI 3.0.3 + Swagger UI (`swagger-jsdoc`, `swagger-ui-express`) |
 
 ---
 
@@ -46,6 +47,7 @@ npm start
 ```
 
 La aplicación queda disponible en <http://localhost:3000> y la API en <http://localhost:3000/api>.
+La documentación interactiva de la API está en <http://localhost:3000/api-docs>.
 
 El contenedor queda marcado como `healthy` cuando MySQL termina de inicializar. Para confirmarlo:
 
@@ -146,15 +148,24 @@ curl -X POST http://localhost:3000/api/usuarios/login \
 
 ## Documentación de la API (Swagger)
 
-**El proyecto no tiene Swagger ni OpenAPI.** No está `swagger-ui-express` ni `swagger-jsdoc` en `package.json`, no hay middleware de documentación en `index.js` y las rutas `/api-docs` y `/api/swagger` responden `404`.
+La API está documentada con **OpenAPI 3.0.3** y se sirve con Swagger UI.
 
-La referencia disponible es la tabla de endpoints de este README. Para agregar Swagger:
+| Recurso | URL |
+| --- | --- |
+| Swagger UI (interactiva) | <http://localhost:3000/api-docs> |
+| Especificación OpenAPI en JSON | <http://localhost:3000/api-docs.json> |
 
-```bash
-npm install swagger-ui-express swagger-jsdoc
-```
+La especificación se arma en tiempo de arranque con `swagger-jsdoc`: la definición base (título, servidores, esquemas y respuestas reutilizables) vive en `config/swagger.js` y cada endpoint se documenta con un bloque `@openapi` encima de su ruta en `routes/api.js`. Al cambiar una ruta hay que actualizar su bloque: la documentación no se genera desde el código, se lee de esos comentarios.
 
-y montar el middleware en `index.js` antes de `app.use('/api', apiRouter)`.
+Las 11 rutas documentadas cubren las 14 operaciones registradas (algunos paths comparten `PUT`/`DELETE`/`PATCH`). Las rutas duplicadas del final de `routes/api.js` no se documentan porque nunca se ejecutan.
+
+### Probar un endpoint desde Swagger UI
+
+1. Abrir <http://localhost:3000/api-docs>
+2. Desplegar el endpoint (por ejemplo `POST /api/usuarios/login`) y pulsar **Try it out**
+3. Editar el JSON de ejemplo y pulsar **Execute**
+
+Los endpoints escriben en la base real del contenedor, no en una copia: los `POST`, `PUT`, `PATCH` y `DELETE` que se ejecutan desde ahí modifican los datos de desarrollo.
 
 ---
 
@@ -164,7 +175,8 @@ y montar el middleware en `index.js` antes de `app.use('/api', apiRouter)`.
 ├── bd/
 │   └── huellitas_digitales (1).sql   # Dump de MySQL (init automático del contenedor)
 ├── config/
-│   └── bd.js                        # Instancia de Sequelize y verificación de conexión
+│   ├── bd.js                        # Instancia de Sequelize y verificación de conexión
+│   └── swagger.js                   # Definición OpenAPI 3.0.3 + esquemas reutilizables
 ├── models/
 │   ├── Usuario.js                   # tabla: usuario
 │   ├── Mascota.js                   # tabla: mascotas
