@@ -18,6 +18,8 @@ Backend en Node.js + Express 5 + Sequelize, con MySQL 8.4 ejecutándose en Docke
 | Hash de contraseñas | bcrypt / bcryptjs |
 | Documentación | OpenAPI 3.0.3 + Swagger UI (`swagger-jsdoc`, `swagger-ui-express`) |
 | Pruebas | Jest 30 + Supertest 7 (modelos mockeados, sin base de datos) |
+| Pruebas de carga | Grafana k6 |
+| Cliente de API | Colección de Postman |
 
 ---
 
@@ -145,6 +147,8 @@ curl -X POST http://localhost:3000/api/usuarios/login \
   -d '{"correo":"eilyn.angarita@correo.com","contrasena":"123456"}'
 ```
 
+> `GET /api/usuarios/:id_usuario/mascotas` anida el historial bajo la clave **`Cuidados`** (con mayúscula inicial): es el alias que Sequelize genera para el `include` al no declararse un `as`. No es `cuidados` en minúscula.
+
 ---
 
 ## Documentación de la API (Swagger)
@@ -219,6 +223,111 @@ Tests:       30 passed, 30 total
 
 ---
 
+## Pruebas de carga (k6)
+
+`k6/api-stress.js` es una prueba de **stress** con Grafana k6: sube de 0 a 200 usuarios virtuales y mide latencia y errores por endpoint.
+
+La prueba es de **solo lectura** a propósito: no crea ni modifica datos. El único `POST` es el login, que valida con bcrypt pero no escribe. Así se puede correr contra la base de desarrollo sin ensuciarla ni romper el índice único de correos.
+
+### Instalar k6
+
+```bash
+winget install k6 --source winget   # Windows
+brew install k6                     # macOS
+```
+
+O usarlo con Docker, sin instalar nada (ver más abajo).
+
+### Ejecutar
+
+```bash
+npm run test:stress
+
+# Versión corta para un smoke test de 8 segundos
+k6 run --stage 5s:10 --stage 3s:0 k6/api-stress.js
+
+# Con Docker (la API corre en el host, el contenedor la alcanza por host.docker.internal)
+docker run --rm -v "${PWD}/k6:/scripts" -e BASE_URL=http://host.docker.internal:3000 \
+  grafana/k6 run /scripts/api-stress.js
+```
+
+### Perfil de carga
+
+| Etapa | Duración | Usuarios virtuales | Objetivo |
+| --- | --- | --- | --- |
+| Calentamiento | 30s | 0 → 20 | Estabilizar JIT y pool de conexiones |
+| Carga normal | 1m | 20 → 50 | Línea base de latencia |
+| Stress | 1m | 50 → 100 | Buscar el punto de degradación |
+| Pico | 30s | 100 → 200 | Comportamiento bajo saturación |
+| Recuperación | 30s | 200 → 0 | Verificar que vuelve solo |
+
+Total: 3m 30s, con `gracefulRampDown` de 10s.
+
+### Umbrales
+
+Si un umbral se cruza, k6 termina con código de salida `99` y el run queda como fallido (sirve para CI).
+
+| Métrica | Umbral | Por qué |
+| --- | --- | --- |
+| `http_req_failed` | `rate<0.01` | Menos del 1% de errores |
+| `http_req_duration` | `p(95)<500`, `p(99)<1500` | Latencia global |
+| `http_req_duration{endpoint:catalogos}` | `p(95)<300` | Consultas sin joins |
+| `http_req_duration{endpoint:perfil}` | `p(95)<400` | Perfil y mascotas con `include` |
+| `http_req_duration{endpoint:login}` | `p(95)<900` | bcrypt consume CPU real |
+| `checks` | `rate>0.99` | Los `check()` deben pasar |
+
+### Variables
+
+| Variable | Por defecto | Uso |
+| --- | --- | --- |
+| `BASE_URL` | `http://localhost:3000` | Base de la API (`host.docker.internal` con Docker) |
+| `USUARIO_CORREO` | `eilyn.angarita@correo.com` | Usuario de prueba |
+| `USUARIO_CONTRASENA` | `123456` | Contraseña del usuario |
+
+`setup()` valida que la API responda y que el usuario pueda iniciar sesión; si algo falla, aborta antes de generar carga con un mensaje claro. Los ids de usuario y mascota se resuelven en caliente, no están hardcodeados.
+
+### Cómo leer el resultado
+
+k6 imprime el resumen en consola: `http_reqs` (throughput), `http_req_duration` (percentiles), `http_req_failed` y el detalle por `endpoint:*`. Para guardar las métricas crudas:
+
+```bash
+k6 run --out json=resultado.json k6/api-stress.js
+```
+
+Referencia medida en local (Docker Desktop, 10 VUs, prueba corta): `p(95)` de 7 ms en catálogos, 12 ms en perfil y 60 ms en login — el login domina por el costo de bcrypt.
+
+---
+
+## Colección de Postman
+
+La carpeta `postman/` trae la colección completa de la API lista para importar.
+
+| Archivo | Contenido |
+| --- | --- |
+| `Huellitas-Digitales.postman_collection.json` | 15 requests en 5 carpetas, con cuerpos, cabeceras y tests |
+| `Huellitas-Local.postman_environment.json` | `baseUrl`, `correo` y `contrasena` del entorno local |
+
+### Importar
+
+1. Postman → **Import** → arrastrar los dos archivos de `postman/`
+2. Seleccionar el environment **Huellitas Digitales - Local** arriba a la derecha
+3. Con la API levantada (`npm start`), ejecutar por carpeta o la colección completa con **Run**
+
+### Qué incluye
+
+- **Cuerpos completos** en cada `POST`/`PUT`/`PATCH`, con los campos obligatorios y opcionales del modelo.
+- **Cabeceras** `Content-Type: application/json` y `Accept: application/json`.
+- **Tests por request** (`pm.test`): código de estado, forma de la respuesta y, sobre todo, que la contraseña nunca se devuelva.
+- **Encadenado de variables**: el login guarda `idUsuario`, *Mascotas del usuario* guarda `idMascota`, *Crear mascota* guarda `idMascotaCreada` y *Crear cuidado* guarda `idCuidadoCreado`. Ejecutando en orden no hay que tocar nada a mano.
+- **Correo único** por ejecución en el registro (pre-request script con `Date.now()`), para no chocar con el índice `UNIQUE` de `usuario.correo`.
+- **Limpieza**: los `DELETE` de mascota y cuidado borran lo que creó la propia colección.
+
+> El registro sí deja un usuario nuevo (`prueba.<timestamp>@correo.com`), porque la API no expone un endpoint para eliminar usuarios.
+
+Verificado ejecutando las 15 peticiones contra la API real, en orden y con las variables encadenadas: **15/15 OK**.
+
+---
+
 ## Estructura del proyecto
 
 ```text
@@ -241,6 +350,11 @@ Tests:       30 passed, 30 total
 │   ├── usuarios.test.js
 │   ├── mascotas.test.js
 │   └── cuidados.test.js             # Cuidados, catálogos y especificación OpenAPI
+├── k6/
+│   └── api-stress.js                # Prueba de stress (solo lectura, 200 VUs de pico)
+├── postman/
+│   ├── Huellitas-Digitales.postman_collection.json
+│   └── Huellitas-Local.postman_environment.json
 ├── css/
 │   └── estilos.css
 ├── index.html / mascotas.html / mascota.html

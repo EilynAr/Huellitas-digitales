@@ -1,0 +1,555 @@
+{
+  "info": {
+    "_postman_id": "6a1f8f2e-2c1a-4f7b-9d3e-huellitas0001",
+    "name": "Huellitas Digitales API",
+    "description": "Colección de la API REST de Huellitas Digitales.\n\n**Requisitos**\n1. `docker compose up -d` (MySQL)\n2. `npm start` (API en http://localhost:3000)\n\n**Variables**: la colección trae valores por defecto. Los ids (`idUsuario`, `idMascota`, `idCuidadoCreado`) se van completando solos: ejecutá la colección en orden (Runner) o cada request que los necesita depende del anterior.\n\n**Documentación viva**: http://localhost:3000/api-docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "correo", "value": "eilyn.angarita@correo.com" },
+    { "key": "contrasena", "value": "123456" },
+    { "key": "idUsuario", "value": "6" },
+    { "key": "idMascota", "value": "11" },
+    { "key": "idMascotaCreada", "value": "" },
+    { "key": "idCuidadoCreado", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "1. Registro de usuario",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Correo unico por ejecucion: la tabla usuario tiene indice UNIQUE en correo",
+                  "pm.vars.set('correoRegistro', `prueba.${Date.now()}@correo.com`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('201 creado', () => pm.response.to.have.status(201));",
+                  "pm.test('no devuelve la contrasena', () => pm.expect(json.usuario.contrasena).to.be.undefined);",
+                  "pm.test('asigna tipo Usuario por defecto', () => pm.expect(json.usuario.id_tipo_usuario).to.eql(2));",
+                  "pm.test('el correo coincide con el enviado', () => pm.expect(json.usuario.correo).to.eql(pm.vars.get('correoRegistro')));",
+                  "",
+                  "pm.collectionVariables.set('idUsuarioNuevo', String(json.usuario.id_usuario));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Prueba\",\n  \"apellido\": \"Postman\",\n  \"correo\": \"{{correoRegistro}}\",\n  \"contrasena\": \"123456\",\n  \"id_tipo_usuario\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/registro",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "registro"]
+            },
+            "description": "Crea un usuario con la contraseña encriptada (bcrypt). El correo usa la variable dinámica {{$timestamp}} para no chocar con el índice único de `usuario.correo`.\n\n**400** si el correo ya existe."
+          }
+        },
+        {
+          "name": "2. Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('devuelve id de usuario', () => pm.expect(json.usuario.id_usuario).to.be.a('number'));",
+                  "pm.test('no devuelve la contrasena', () => pm.expect(json.usuario.contrasena).to.be.undefined);",
+                  "",
+                  "if (json.usuario && json.usuario.id_usuario) {",
+                  "  pm.collectionVariables.set('idUsuario', String(json.usuario.id_usuario));",
+                  "}",
+                  "",
+                  "pm.test('guarda idUsuario para el resto de la coleccion', () => {",
+                  "  pm.expect(pm.collectionVariables.get('idUsuario')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"{{correo}}\",\n  \"contrasena\": \"{{contrasena}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "login"]
+            },
+            "description": "Valida credenciales con `bcrypt.compare` y guarda el `idUsuario` en las variables de la colección.\n\n**401** si el correo no existe o la contraseña es incorrecta.\n\nOjo: los usuarios heredados del dump guardan la contraseña en texto plano y siempre fallan. `eilyn.angarita@correo.com` / `123456` sí funciona."
+          }
+        },
+        {
+          "name": "3. Perfil de usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('no expone la contrasena', () => pm.expect(json.contrasena).to.be.undefined);",
+                  "pm.test('devuelve el id pedido', () => pm.expect(String(json.id_usuario)).to.eql(pm.collectionVariables.get('idUsuario')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{idUsuario}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "{{idUsuario}}"]
+            },
+            "description": "Perfil del usuario sin el campo `contrasena` (`attributes: { exclude: ['contrasena'] }`).\n\n**404** si no existe."
+          }
+        },
+        {
+          "name": "4. Mascotas del usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('devuelve un arreglo de mascotas', () => pm.expect(json).to.be.an('array').and.not.empty);",
+                  "pm.test('cada mascota trae el arreglo Cuidados', () => pm.expect(json[0].Cuidados).to.be.an('array'));",
+                  "",
+                  "pm.collectionVariables.set('idMascota', String(json[0].id_mascota));",
+                  "pm.test('guarda idMascota para el resto de la coleccion', () => {",
+                  "  pm.expect(pm.collectionVariables.get('idMascota')).to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{idUsuario}}/mascotas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "{{idUsuario}}", "mascotas"]
+            },
+            "description": "Mascotas del usuario con su historial de cuidados anidado y ordenado por fecha descendente.\n\nEl historial viene bajo la clave **`Cuidados`** (con mayúscula): es el alias que Sequelize genera para el `include` sin `as`. **404** si el usuario no tiene mascotas.\n\nGuarda el `idMascota` de la primera mascota en las variables de la colección."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mascotas",
+      "item": [
+        {
+          "name": "1. Crear mascota",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('201 creado', () => pm.response.to.have.status(201));",
+                  "pm.test('devuelve la mascota con id', () => pm.expect(json.mascota.id_mascota).to.be.a('number'));",
+                  "",
+                  "pm.collectionVariables.set('idMascotaCreada', String(json.mascota.id_mascota));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Postman\",\n  \"raza\": \"Mestizo\",\n  \"sexo\": \"M\",\n  \"fecha_nacimiento\": \"2023-05-15\",\n  \"color\": \"Cafe\",\n  \"peso\": 8.50,\n  \"foto\": \"https://ejemplo.com/postman.jpg\",\n  \"id_tipo_mascota\": 1,\n  \"id_usuario\": {{idUsuario}}\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas"]
+            },
+            "description": "Obligatorios: `nombre`, `sexo` (`H` o `M`), `id_tipo_mascota` e `id_usuario`.\n\n**400** si falta alguno. Usa el `idUsuario` resuelto por el login."
+          }
+        },
+        {
+          "name": "2. Actualizar mascota",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('refleja el nuevo peso', () => {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Number(json.mascota.peso)).to.eql(9.75);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peso\": 9.75,\n  \"color\": \"Negro\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/{{idMascotaCreada}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "{{idMascotaCreada}}"]
+            },
+            "description": "Actualiza solo los campos enviados. Requiere haber ejecutado **Mascotas → Crear mascota** (usa `idMascotaCreada`).\n\n**404** si la mascota no existe."
+          }
+        },
+        {
+          "name": "3. Historial de cuidados de una mascota",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('trae el total de cuidados', () => pm.expect(json.total_cuidados).to.be.a('number'));",
+                  "pm.test('el historial es un arreglo', () => pm.expect(json.historial).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/{{idMascota}}/cuidados",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "{{idMascota}}", "cuidados"]
+            },
+            "description": "Historial de una mascota con `total_cuidados`.\n\n**404** si la mascota no existe (no consulta los cuidados)."
+          }
+        },
+        {
+          "name": "4. Eliminar mascota",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('confirma la baja', () => pm.expect(pm.response.json().mensaje).to.include('eliminada'));",
+                  "",
+                  "pm.collectionVariables.set('idMascotaCreada', '');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/mascotas/{{idMascotaCreada}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "mascotas", "{{idMascotaCreada}}"]
+            },
+            "description": "Elimina la mascota y, por `ON DELETE CASCADE`, todos sus cuidados.\n\nEjecutalo al final para dejar la base limpia. **404** si ya no existe."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cuidados",
+      "item": [
+        {
+          "name": "1. Crear cuidado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('201 creado', () => pm.response.to.have.status(201));",
+                  "pm.test('guarda el id del cuidado', () => pm.expect(json.cuidado.id_cuidado).to.be.a('number'));",
+                  "",
+                  "pm.collectionVariables.set('idCuidadoCreado', String(json.cuidado.id_cuidado));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_mascota\": {{idMascota}},\n  \"tipo_cuidado\": \"Vacuna\",\n  \"fecha\": \"2026-11-13\",\n  \"detalle\": \"Refuerzo de rabia\",\n  \"proxima_fecha\": \"2027-11-13\",\n  \"responsable\": \"Dra. Gomez\",\n  \"observaciones\": \"Creado desde Postman\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cuidados",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuidados"]
+            },
+            "description": "`tipo_cuidado` solo acepta `Vacuna` o `Baño` (ENUM de la tabla).\n\nObligatorios: `id_mascota`, `tipo_cuidado`, `fecha`, `detalle`.\n\n**400** si falta alguno o si `proxima_fecha` es anterior a `fecha`."
+          }
+        },
+        {
+          "name": "2. Reemplazar cuidado (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('refleja el detalle nuevo', () => {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.cuidado.detalle).to.eql('Refuerzo anual de rabia');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_mascota\": {{idMascota}},\n  \"tipo_cuidado\": \"Vacuna\",\n  \"fecha\": \"2026-11-13\",\n  \"detalle\": \"Refuerzo anual de rabia\",\n  \"proxima_fecha\": \"2027-11-13\",\n  \"responsable\": \"Dra. Gomez\",\n  \"observaciones\": \"Actualizado con PUT\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+            },
+            "description": "Reemplaza el registro completo. Requiere **Cuidados → Crear cuidado**.\n\n**404** si el cuidado no existe."
+          }
+        },
+        {
+          "name": "3. Actualizar cuidado (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('solo cambia el campo enviado', () => {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.cuidado.observaciones).to.eql('Sin reacciones adversas');",
+                  "  pm.expect(json.cuidado.detalle).to.eql('Refuerzo anual de rabia');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"observaciones\": \"Sin reacciones adversas\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+            },
+            "description": "Actualiza solo los campos enviados. Requiere **Cuidados → Crear cuidado**.\n\n**404** si el cuidado no existe."
+          }
+        },
+        {
+          "name": "4. Eliminar cuidado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('confirma la baja', () => pm.expect(pm.response.json().mensaje).to.include('eliminado'));",
+                  "",
+                  "pm.collectionVariables.set('idCuidadoCreado', '');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+            },
+            "description": "Elimina el registro creado por la colección.\n\n**404** si ya no existe."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catálogos",
+      "item": [
+        {
+          "name": "Tipos de mascota",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('devuelve el catalogo', () => pm.expect(json).to.be.an('array').and.not.empty);",
+                  "pm.test('cada item trae id y nombre', () => {",
+                  "  pm.expect(json[0]).to.have.keys(['id_tipo_mascota', 'nombre']);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/tipos-mascota",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tipos-mascota"]
+            },
+            "description": "Catálogo de tipos de mascota. La respuesta trae solo `id_tipo_mascota` y `nombre` (el modelo no declara `descripcion`, aunque exista en la tabla)."
+          }
+        },
+        {
+          "name": "Tipos de usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('devuelve el catalogo', () => pm.expect(json).to.be.an('array').and.not.empty);",
+                  "pm.test('incluye Administrador y Usuario', () => {",
+                  "  const nombres = json.map((tipo) => tipo.nombre);",
+                  "  pm.expect(nombres).to.include.members(['Administrador', 'Usuario']);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/tipos-usuario",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tipos-usuario"]
+            },
+            "description": "Catálogo de tipos de usuario: 1 = Administrador, 2 = Usuario."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documentación",
+      "item": [
+        {
+          "name": "Especificación OpenAPI",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "pm.test('es OpenAPI 3.0.3', () => pm.expect(json.openapi).to.eql('3.0.3'));",
+                  "pm.test('documenta todas las rutas', () => pm.expect(Object.keys(json.paths)).to.have.lengthOf(11));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api-docs.json",
+              "host": ["{{baseUrl}}"],
+              "path": ["api-docs.json"]
+            },
+            "description": "Especificación OpenAPI generada por `swagger-jsdoc`. La UI interactiva está en `{{baseUrl}}/api-docs`."
+          }
+        }
+      ]
+    }
+  ]
+}
