@@ -9,6 +9,39 @@ const Cuidado = require('../models/Cuidado');
 const TipoUsuario = require('../models/TipoUsuario');
 const TipoMascota = require('../models/TipoMascota');
 
+/**
+ * @openapi
+ * /api/usuarios/registro:
+ *   post:
+ *     tags: [Usuarios]
+ *     summary: Registra un usuario nuevo
+ *     description: Verifica que el correo no exista y guarda la contrasena encriptada con bcrypt. Si no se envia id_tipo_usuario se asigna 2 (Usuario).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre, apellido, correo, contrasena]
+ *             properties:
+ *               nombre: { type: string, example: María }
+ *               apellido: { type: string, example: Pérez }
+ *               correo: { type: string, format: email, example: maria.perez@correo.com }
+ *               contrasena: { type: string, format: password, example: '123456' }
+ *               id_tipo_usuario: { type: integer, default: 2, example: 2 }
+ *     responses:
+ *       201:
+ *         description: Usuario creado (sin el campo contrasena)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Usuario creado con éxito }
+ *                 usuario: { $ref: '#/components/schemas/Usuario' }
+ *       400: { $ref: '#/components/responses/BadRequest' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // 1. ENDPOINT: Crear Usuario (Registro)
 // POST /api/usuarios/registro
 router.post('/usuarios/registro', async (req, res) => {
@@ -42,6 +75,36 @@ router.post('/usuarios/registro', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/usuarios/login:
+ *   post:
+ *     tags: [Usuarios]
+ *     summary: Inicia sesión
+ *     description: Busca al usuario por correo y compara la contrasena con bcrypt. Los usuarios heredados del dump guardan la contrasena en texto plano y no pueden iniciar sesión hasta reencriptarla.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [correo, contrasena]
+ *             properties:
+ *               correo: { type: string, format: email, example: eilyn.angarita@correo.com }
+ *               contrasena: { type: string, format: password, example: '123456' }
+ *     responses:
+ *       200:
+ *         description: Credenciales válidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: ¡Inicio de sesión exitoso! }
+ *                 usuario: { $ref: '#/components/schemas/Usuario' }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // 2. ENDPOINT: Iniciar Sesión (Login)
 // POST /api/usuarios/login
 router.post('/usuarios/login', async (req, res) => {
@@ -75,6 +138,42 @@ router.post('/usuarios/login', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/mascotas:
+ *   post:
+ *     tags: [Mascotas]
+ *     summary: Registra una mascota
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre, sexo, id_tipo_mascota, id_usuario]
+ *             properties:
+ *               nombre: { type: string, example: Luna }
+ *               raza: { type: string, example: Golden Retriever }
+ *               sexo: { type: string, enum: [H, M], example: H }
+ *               fecha_nacimiento: { type: string, format: date, example: '2021-03-12' }
+ *               color: { type: string, example: Dorado }
+ *               peso: { type: number, example: 28.5 }
+ *               foto: { type: string, example: 'https://ejemplo.com/luna.jpg' }
+ *               id_tipo_mascota: { type: integer, example: 1 }
+ *               id_usuario: { type: integer, example: 2 }
+ *     responses:
+ *       201:
+ *         description: Mascota registrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Mascota registrada con éxito }
+ *                 mascota: { $ref: '#/components/schemas/Mascota' }
+ *       400: { $ref: '#/components/responses/BadRequest' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // 3. ENDPOINT: Crear Mascota
 // POST /api/mascotas
 router.post('/mascotas', async (req, res) => {
@@ -105,6 +204,41 @@ router.post('/mascotas', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/cuidados:
+ *   post:
+ *     tags: [Cuidados]
+ *     summary: Registra un cuidado (vacuna o baño)
+ *     description: Si se envia proxima_fecha, debe ser mayor o igual a fecha.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id_mascota, tipo_cuidado, fecha, detalle]
+ *             properties:
+ *               id_mascota: { type: integer, example: 1 }
+ *               tipo_cuidado: { type: string, enum: [Vacuna, Baño], example: Vacuna }
+ *               fecha: { type: string, format: date, example: '2025-10-02' }
+ *               detalle: { type: string, example: Parvovirus }
+ *               proxima_fecha: { type: string, format: date, example: '2026-12-02' }
+ *               responsable: { type: string, example: Dra. Rojas }
+ *               observaciones: { type: string, example: Sin reacciones adversas }
+ *     responses:
+ *       201:
+ *         description: Cuidado registrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Registro de cuidado agregado con éxito }
+ *                 cuidado: { $ref: '#/components/schemas/Cuidado' }
+ *       400: { $ref: '#/components/responses/BadRequest' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // 4. ENDPOINT: Agregar Cuidado
 // POST /api/cuidados
 router.post('/cuidados', async (req, res) => {
@@ -144,6 +278,35 @@ module.exports = router;
 // =========================================================================
 
 // 5. ENDPOINT: Obtener las mascotas de un usuario específico junto con sus cuidados
+/**
+ * @openapi
+ * /api/usuarios/{id_usuario}/mascotas:
+ *   get:
+ *     tags: [Usuarios]
+ *     summary: Mascotas de un usuario con su historial de cuidados
+ *     parameters:
+ *       - in: path
+ *         name: id_usuario
+ *         required: true
+ *         schema: { type: integer, example: 2 }
+ *     responses:
+ *       200:
+ *         description: Lista de mascotas (cada una incluye el arreglo cuidados ordenado por fecha descendente)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 allOf:
+ *                   - $ref: '#/components/schemas/Mascota'
+ *                   - type: object
+ *                     properties:
+ *                       cuidados:
+ *                         type: array
+ *                         items: { $ref: '#/components/schemas/Cuidado' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // GET /api/usuarios/:id_usuario/mascotas
 router.get('/usuarios/:id_usuario/mascotas', async (req, res) => {
   try {
@@ -172,6 +335,33 @@ router.get('/usuarios/:id_usuario/mascotas', async (req, res) => {
 });
 
 // 6. ENDPOINT: Obtener el historial completo de cuidados de una mascota específica
+/**
+ * @openapi
+ * /api/mascotas/{id_mascota}/cuidados:
+ *   get:
+ *     tags: [Mascotas]
+ *     summary: Historial de cuidados de una mascota
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema: { type: integer, example: 1 }
+ *     responses:
+ *       200:
+ *         description: Historial ordenado por fecha descendente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mascota: { type: string, example: Luna }
+ *                 total_cuidados: { type: integer, example: 3 }
+ *                 historial:
+ *                   type: array
+ *                   items: { $ref: '#/components/schemas/Cuidado' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // GET /api/mascotas/:id_mascota/cuidados
 router.get('/mascotas/:id_mascota/cuidados', async (req, res) => {
   try {
@@ -200,6 +390,27 @@ router.get('/mascotas/:id_mascota/cuidados', async (req, res) => {
 });
 
 // 7. ENDPOINT: Obtener el perfil detallado de un usuario (Ocultando su contraseña)
+/**
+ * @openapi
+ * /api/usuarios/{id_usuario}:
+ *   get:
+ *     tags: [Usuarios]
+ *     summary: Perfil de un usuario
+ *     description: Devuelve el usuario sin el campo contrasena.
+ *     parameters:
+ *       - in: path
+ *         name: id_usuario
+ *         required: true
+ *         schema: { type: integer, example: 2 }
+ *     responses:
+ *       200:
+ *         description: Datos del usuario
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Usuario' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // GET /api/usuarios/:id_usuario
 router.get('/usuarios/:id_usuario', async (req, res) => {
   try {
@@ -224,6 +435,46 @@ router.get('/usuarios/:id_usuario', async (req, res) => {
 // =========================================================================
 
 // 8. ENDPOINT: Actualizar Mascota
+/**
+ * @openapi
+ * /api/mascotas/{id_mascota}:
+ *   put:
+ *     tags: [Mascotas]
+ *     summary: Actualiza una mascota
+ *     description: Actualiza solo los campos enviados en el cuerpo.
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema: { type: integer, example: 1 }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre: { type: string, example: Luna }
+ *               raza: { type: string, example: Golden Retriever }
+ *               sexo: { type: string, enum: [H, M], example: H }
+ *               fecha_nacimiento: { type: string, format: date, example: '2021-03-12' }
+ *               color: { type: string, example: Dorado }
+ *               peso: { type: number, example: 29.4 }
+ *               foto: { type: string, example: 'https://ejemplo.com/luna.jpg' }
+ *               id_tipo_mascota: { type: integer, example: 1 }
+ *     responses:
+ *       200:
+ *         description: Mascota actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Mascota actualizada con éxito }
+ *                 mascota: { $ref: '#/components/schemas/Mascota' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // PUT /api/mascotas/:id_mascota
 router.put('/mascotas/:id_mascota', async (req, res) => {
   try {
@@ -242,6 +493,27 @@ router.put('/mascotas/:id_mascota', async (req, res) => {
 });
 
 // 9. ENDPOINT: Eliminar Mascota
+/**
+ * @openapi
+ * /api/mascotas/{id_mascota}:
+ *   delete:
+ *     tags: [Mascotas]
+ *     summary: Elimina una mascota
+ *     description: Elimina en cascada sus cuidados asociados (ON DELETE CASCADE).
+ *     parameters:
+ *       - in: path
+ *         name: id_mascota
+ *         required: true
+ *         schema: { type: integer, example: 1 }
+ *     responses:
+ *       200:
+ *         description: Mascota eliminada
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Mensaje' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // DELETE /api/mascotas/:id_mascota
 router.delete('/mascotas/:id_mascota', async (req, res) => {
   try {
@@ -260,6 +532,44 @@ router.delete('/mascotas/:id_mascota', async (req, res) => {
 });
 
 // 10. ENDPOINT: Actualizar Cuidado
+/**
+ * @openapi
+ * /api/cuidados/{id_cuidado}:
+ *   put:
+ *     tags: [Cuidados]
+ *     summary: Reemplaza un cuidado completo
+ *     parameters:
+ *       - in: path
+ *         name: id_cuidado
+ *         required: true
+ *         schema: { type: integer, example: 2 }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_mascota: { type: integer, example: 1 }
+ *               tipo_cuidado: { type: string, enum: [Vacuna, Baño], example: Vacuna }
+ *               fecha: { type: string, format: date, example: '2025-10-02' }
+ *               detalle: { type: string, example: Refuerzo de parvovirus }
+ *               proxima_fecha: { type: string, format: date, example: '2026-12-02' }
+ *               responsable: { type: string, example: Dra. Rojas }
+ *               observaciones: { type: string, example: Sin reacciones }
+ *     responses:
+ *       200:
+ *         description: Cuidado actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Cuidado actualizado con éxito }
+ *                 cuidado: { $ref: '#/components/schemas/Cuidado' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // PUT /api/cuidados/:id_cuidado
 router.put('/cuidados/:id_cuidado', async (req, res) => {
   try {
@@ -278,6 +588,26 @@ router.put('/cuidados/:id_cuidado', async (req, res) => {
 });
 
 // 11. ENDPOINT: Eliminar Cuidado
+/**
+ * @openapi
+ * /api/cuidados/{id_cuidado}:
+ *   delete:
+ *     tags: [Cuidados]
+ *     summary: Elimina un cuidado
+ *     parameters:
+ *       - in: path
+ *         name: id_cuidado
+ *         required: true
+ *         schema: { type: integer, example: 2 }
+ *     responses:
+ *       200:
+ *         description: Cuidado eliminado
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Mensaje' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // DELETE /api/cuidados/:id_cuidado
 router.delete('/cuidados/:id_cuidado', async (req, res) => {
   try {
@@ -325,6 +655,41 @@ router.put('/cuidados/:id_cuidado', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/cuidados/{id_cuidado}:
+ *   patch:
+ *     tags: [Cuidados]
+ *     summary: Actualiza campos parciales de un cuidado
+ *     parameters:
+ *       - in: path
+ *         name: id_cuidado
+ *         required: true
+ *         schema: { type: integer, example: 2 }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               detalle: { type: string, example: Parvovirus (refuerzo) }
+ *               responsable: { type: string, example: Dra. Rojas }
+ *               observaciones: { type: string, example: Sin reacciones adversas }
+ *               proxima_fecha: { type: string, format: date, example: '2027-01-15' }
+ *     responses:
+ *       200:
+ *         description: Cuidado actualizado parcialmente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje: { type: string, example: Cuidado actualizado parcialmente con PATCH }
+ *                 cuidado: { $ref: '#/components/schemas/Cuidado' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // 2. RUTA PATCH: Actualiza solo los campos que envíes en el JSON
 router.patch('/cuidados/:id_cuidado', async (req, res) => {
   try {
@@ -374,6 +739,22 @@ router.post('/usuarios/login', async (req, res) => {
 // ==========================================
 // CATÁLOGOS (TIPOS DE MASCOTA Y USUARIO)
 // ==========================================
+/**
+ * @openapi
+ * /api/tipos-mascota:
+ *   get:
+ *     tags: [Catálogos]
+ *     summary: Lista los tipos de mascota
+ *     responses:
+ *       200:
+ *         description: Catálogo completo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: { $ref: '#/components/schemas/TipoMascota' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // GET /api/tipos-mascota
 router.get('/tipos-mascota', async (req, res) => {
   try {
@@ -384,6 +765,22 @@ router.get('/tipos-mascota', async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /api/tipos-usuario:
+ *   get:
+ *     tags: [Catálogos]
+ *     summary: Lista los tipos de usuario
+ *     responses:
+ *       200:
+ *         description: Catálogo completo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: { $ref: '#/components/schemas/TipoUsuario' }
+ *       500: { $ref: '#/components/responses/ServerError' }
+ */
 // GET /api/tipos-usuario
 router.get('/tipos-usuario', async (req, res) => {
   try {

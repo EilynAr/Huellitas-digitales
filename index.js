@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const apiRouter = require('./routes/api');
 const { conectarDB } = require('./config/bd');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 require('dotenv').config();
 
 // Importar modelos para definir relaciones
@@ -24,6 +26,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname)); // Permite abrir tus archivos .html desde localhost:3000
 
+// Documentación de la API (Swagger UI) y especificación OpenAPI en JSON
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customSiteTitle: 'Huellitas Digitales API'
+}));
+app.get('/api-docs.json', (req, res) => res.json(swaggerSpec));
+
 // Conexión a la base de datos
 conectarDB();
 
@@ -32,4 +40,5 @@ app.use('/api', apiRouter);
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
+  console.log(`Documentación de la API en http://localhost:${port}/api-docs`);
 });
