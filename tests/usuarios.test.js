@@ -168,14 +168,15 @@ describe('GET /api/usuarios/:id_usuario', () => {
 describe('GET /api/usuarios/:id_usuario/mascotas', () => {
   test('devuelve las mascotas con su historial de cuidados', async () => {
     Mascota.findAll.mockResolvedValue([
-      mascotaFake({ cuidados: [{ id_cuidado: 2, tipo_cuidado: 'Vacuna' }] })
+      // Sequelize nombra el include con la mayúscula del modelo: `Cuidados`
+      mascotaFake({ Cuidados: [{ id_cuidado: 2, tipo_cuidado: 'Vacuna' }] })
     ]);
 
     const respuesta = await request(app).get('/api/usuarios/2/mascotas');
 
     expect(respuesta.status).toBe(200);
     expect(respuesta.body).toHaveLength(1);
-    expect(respuesta.body[0].cuidados).toHaveLength(1);
+    expect(respuesta.body[0].Cuidados).toHaveLength(1);
     expect(Mascota.findAll).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id_usuario: '2' } })
     );

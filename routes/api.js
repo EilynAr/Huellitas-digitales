@@ -291,7 +291,7 @@ module.exports = router;
  *         schema: { type: integer, example: 2 }
  *     responses:
  *       200:
- *         description: Lista de mascotas (cada una incluye el arreglo cuidados ordenado por fecha descendente)
+ *         description: Lista de mascotas. Cada mascota incluye el arreglo `Cuidados` (alias que Sequelize genera para el `include`, con mayúscula inicial) ordenado por fecha descendente.
  *         content:
  *           application/json:
  *             schema:
@@ -301,7 +301,7 @@ module.exports = router;
  *                   - $ref: '#/components/schemas/Mascota'
  *                   - type: object
  *                     properties:
- *                       cuidados:
+ *                       Cuidados:
  *                         type: array
  *                         items: { $ref: '#/components/schemas/Cuidado' }
  *       404: { $ref: '#/components/responses/NotFound' }
