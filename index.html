@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión · Huellitas Digitales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <main class="login">
+
+    <!-- Lado izquierdo: ilustración -->
+    <section class="login-ilustracion">
+      <div class="burbuja burbuja-menta" aria-hidden="true"></div>
+      <div class="burbuja burbuja-durazno" aria-hidden="true"></div>
+
+      <div class="logo">
+        <div class="logo-icono">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#6B4FB3" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg>
+        </div>
+        <span class="logo-texto">Huellitas Digitales</span>
+      </div>
+
+      <div class="login-dibujo">
+        <svg viewBox="0 0 380 250" role="img" aria-label="Un perro y un gato sonriendo juntos">
+          <ellipse cx="190" cy="228" rx="170" ry="18" fill="#D9CDF5"/>
+          <!-- Perro -->
+          <g transform="translate(30 40) scale(2.6)">
+            <ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/>
+            <ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/>
+            <circle cx="32" cy="34" r="20" fill="#F2D7B6"/>
+            <ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/>
+            <circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/>
+            <circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/>
+            <ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/>
+            <path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <circle cx="20" cy="40" r="3" fill="#F7B9C4"/>
+            <circle cx="44" cy="40" r="3" fill="#F7B9C4"/>
+          </g>
+          <!-- Gato -->
+          <g transform="translate(196 62) scale(2.3)">
+            <path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/>
+            <path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/>
+            <path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/>
+            <path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/>
+            <circle cx="32" cy="36" r="20" fill="#D9D4E6"/>
+            <ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/>
+            <ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/>
+            <path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/>
+            <path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M8 38h10M8 43l10-2M56 38H46M56 43l-10-2" stroke="#8C86A0" stroke-width="1.4" stroke-linecap="round"/>
+          </g>
+          <!-- Corazones y huellitas -->
+          <path transform="translate(176 26)" d="M0 5C0-1 9-1 9 5c0-6 9-6 9 0 0 6-9 11-9 11S0 11 0 5z" fill="#F7B9C4"/>
+          <path transform="translate(330 120) scale(0.6)" d="M0 5C0-1 9-1 9 5c0-6 9-6 9 0 0 6-9 11-9 11S0 11 0 5z" fill="#F7B9C4"/>
+          <g transform="translate(14 190) scale(1.1)" fill="#C9B8F0"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></g>
+          <g transform="translate(336 186) scale(0.9)" fill="#A9DCC6"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></g>
+        </svg>
+      </div>
+
+      <div class="login-mensaje">
+        <h1>Toda la información de tus mascotas, en un solo lugar.</h1>
+        <p>Registra a tus peludos, emplumados y escamados, y consulta sus datos cuando los necesites.</p>
+      </div>
+    </section>
+
+    <!-- Lado derecho: formulario -->
+    <section class="login-formulario">
+      <form action="mascotas.html" method="get">
+        <div class="titulo-form">
+          <h2>¡Hola de nuevo!</h2>
+          <p>Inicia sesión para ver a tus mascotas.</p>
+        </div>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" name="correo" type="email" placeholder="nombre@correo.com" required>
+        </div>
+
+        <div class="campo">
+          <label for="clave">Contraseña</label>
+          <input id="clave" name="clave" type="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primario btn-bloque">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg>
+          Ingresar
+        </button>
+
+        <p class="texto-centro">¿No tienes cuenta? <a href="#crear-cuenta" class="btn-link">Crear cuenta</a></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ===== MODAL: Crear cuenta ===== -->
+  <div id="crear-cuenta" class="modal">
+    <a href="#" class="modal-fondo" aria-label="Cerrar"></a>
+    <div class="modal-caja" role="dialog" aria-modal="true" aria-labelledby="titulo-registro">
+      <div class="modal-cabecera">
+        <div class="modal-titulo">
+          <div class="modal-avatar">
+            <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h2 id="titulo-registro">Crear cuenta</h2>
+            <p>Únete y registra a tus mascotas.</p>
+          </div>
+        </div>
+        <a href="#" class="btn-icono" aria-label="Cerrar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </a>
+      </div>
+
+      <form action="mascotas.html" method="get" style="display: flex; flex-direction: column; gap: 18px">
+        <div class="fila-2">
+          <div class="campo">
+            <label for="r-nombre">Nombre</label>
+            <input id="r-nombre" name="nombre" type="text" placeholder="Ej. María" required>
+          </div>
+          <div class="campo">
+            <label for="r-apellido">Apellido</label>
+            <input id="r-apellido" name="apellido" type="text" placeholder="Ej. Pérez" required>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="r-correo">Correo electrónico</label>
+          <input id="r-correo" name="correo" type="email" placeholder="nombre@correo.com" required>
+        </div>
+        <div class="fila-2">
+          <div class="campo">
+            <label for="r-clave">Contraseña</label>
+            <input id="r-clave" name="clave" type="password" placeholder="Mínimo 8 caracteres" minlength="8" required>
+          </div>
+          <div class="campo">
+            <label for="r-clave2">Confirmar contraseña</label>
+            <input id="r-clave2" name="clave2" type="password" placeholder="Repítela" minlength="8" required>
+          </div>
+        </div>
+        <div class="modal-acciones">
+          <a href="#" class="btn btn-secundario">Cancelar</a>
+          <button type="submit" class="btn btn-primario">Crear cuenta</button>
+        </div>
+            </form>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. CONECTAR FORMULARIO DE INICIAR SESIÓN
+    // ==========================================
+    const formLogin = document.querySelector('.login-formulario form');
+
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const correo = document.getElementById('correo').value.trim();
+      const contrasena = document.getElementById('clave').value;
+
+      try {
+        const respuesta = await fetch('/api/usuarios/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ correo, contrasena })
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+          alert(datos.error || datos.mensaje || 'Error al iniciar sesión');
+          return;
+        }
+
+        localStorage.setItem('usuario', JSON.stringify(datos.usuario));
+        window.location.href = 'mascotas.html';
+      } catch (error) {
+        alert('Error de conexión con el servidor.');
+        console.error(error);
+      }
+    });
+
+    // ==========================================
+    // 2. CONECTAR MODAL DE CREAR CUENTA (REGISTRO)
+    // ==========================================
+    const formRegistro = document.querySelector('#crear-cuenta form');
+
+    formRegistro.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nombre = document.getElementById('r-nombre').value.trim();
+      const apellido = document.getElementById('r-apellido').value.trim();
+      const correo = document.getElementById('r-correo').value.trim();
+      const contrasena = document.getElementById('r-clave').value;
+      const confirmar = document.getElementById('r-clave2').value;
+
+      if (contrasena !== confirmar) {
+        alert('Las contraseñas no coinciden. Por favor verifícalas.');
+        return;
+      }
+
+      try {
+        const respuesta = await fetch('/api/usuarios/registro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            apellido,
+            correo,
+            contrasena,
+            id_tipo_usuario: 2
+          })
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+          alert(datos.error || datos.mensaje || 'No se pudo crear la cuenta');
+          return;
+        }
+
+        localStorage.setItem('usuario', JSON.stringify(datos.usuario));
+        alert('¡Cuenta creada con éxito! Bienvenido/a ' + nombre);
+        window.location.href = 'mascotas.html';
+      } catch (error) {
+        alert('Error de conexión con el servidor.');
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+</body>
+</html>

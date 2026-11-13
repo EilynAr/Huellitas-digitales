@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis mascotas · Huellitas Digitales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <!-- ===== Barra de navegación ===== -->
+  <header class="navbar">
+    <div class="navbar-contenido">
+      <div class="navbar-izquierda">
+        <a href="mascotas.html" class="logo">
+          <span class="logo-icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6B4FB3" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg></span>
+          <span class="logo-texto">Huellitas Digitales</span>
+        </a>
+        <nav aria-label="Menú principal">
+          <ul class="navbar-menu">
+            <li><a href="mascotas.html" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="#6B4FB3" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg>Mis mascotas</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <details class="cuenta">
+        <summary aria-label="Menú de la cuenta">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#FFE6D5"/><path d="M6 34.5c2.5-6 8-8.5 14-8.5s11.5 2.5 14 8.5a20 20 0 0 1-28 0z" fill="#C9B8F0"/><circle cx="20" cy="17" r="7.5" fill="#F2C9A5"/><path d="M12.3 16.5c0-5.5 3.5-8.5 7.7-8.5s7.7 3 7.7 8.5c-1.5-2.5-4-4-7.7-4.2-3.7.2-6.2 1.7-7.7 4.2z" fill="#5A3E2B"/><circle cx="17.3" cy="18" r="1" fill="#3A2E2A"/><circle cx="22.7" cy="18" r="1" fill="#3A2E2A"/><path d="M18 21q2 1.5 4 0" stroke="#3A2E2A" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
+          María          <svg class="flecha" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="cuenta-menu">
+          <div class="cuenta-datos">
+            <svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#FFE6D5"/><path d="M6 34.5c2.5-6 8-8.5 14-8.5s11.5 2.5 14 8.5a20 20 0 0 1-28 0z" fill="#C9B8F0"/><circle cx="20" cy="17" r="7.5" fill="#F2C9A5"/><path d="M12.3 16.5c0-5.5 3.5-8.5 7.7-8.5s7.7 3 7.7 8.5c-1.5-2.5-4-4-7.7-4.2-3.7.2-6.2 1.7-7.7 4.2z" fill="#5A3E2B"/><circle cx="17.3" cy="18" r="1" fill="#3A2E2A"/><circle cx="22.7" cy="18" r="1" fill="#3A2E2A"/><path d="M18 21q2 1.5 4 0" stroke="#3A2E2A" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
+            <div>
+              <strong>María Pérez</strong>
+              <span>maria.perez@correo.com</span>
+            </div>
+          </div>
+          <a href="#">
+            <span class="icono-cuadro bg-durazno"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A4A1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            Mi perfil
+          </a>
+          <a href="index.html">
+            <span class="icono-cuadro bg-rosa"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9B2C4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg></span>
+            Cerrar sesión
+          </a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+
+  <!-- ===== Contenido ===== -->
+  <main class="contenido">
+    <div class="contenido-cabecera">
+      <h1>Mis mascotas</h1>
+      <p>
+        Tienes 6 mascotas registradas.      </p>
+    </div>
+
+    
+    <form class="buscador" action="mascotas.html" method="get" role="search">
+      <label for="buscar" class="sr-only">Buscar mascota</label>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E5675" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="buscar" name="q" type="search" placeholder="Buscar por nombre o raza y pulsa Enter" value="">
+    </form>
+
+    
+    <section class="grid-mascotas" aria-label="Lista de mascotas">
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-roedor"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="18" r="7" fill="#E8B796"/><circle cx="46" cy="18" r="7" fill="#E8B796"/><circle cx="18" cy="18" r="3.5" fill="#F6C6D0"/><circle cx="46" cy="18" r="3.5" fill="#F6C6D0"/><ellipse cx="32" cy="36" rx="22" ry="20" fill="#F3CDB1"/><ellipse cx="32" cy="42" rx="14" ry="11" fill="#FFF3E4"/><circle cx="25" cy="32" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="32" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="38" rx="2.2" ry="1.6" fill="#E68FA3"/><circle cx="20" cy="40" r="3.5" fill="#F7B9C4"/><circle cx="44" cy="40" r="3.5" fill="#F7B9C4"/></svg></div>
+            <div>
+              <h2>Copito</h2>
+              <span class="etiqueta tipo-roedor">Roedor</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Hámster sirio</dd></div>
+            <div><dt>Sexo</dt><dd>Macho</dd></div>
+            <div><dt>Nacimiento</dt><dd>02/06/2024</dd></div>
+            <div><dt>Color</dt><dd>Blanco</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Copito"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="3">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Copito"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-ave"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M30 14q2-6 6-4" stroke="#E7B94A" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="34" r="20" fill="#FBE7A1"/><ellipse cx="22" cy="40" rx="8" ry="11" fill="#F5D46E" transform="rotate(25 22 40)"/><circle cx="37" cy="29" r="2.6" fill="#3A2E2A"/><path d="M44 32l9 3-9 3Z" fill="#F4A261"/><circle cx="40" cy="38" r="3" fill="#F7B9C4"/></svg></div>
+            <div>
+              <h2>Kiwi</h2>
+              <span class="etiqueta tipo-ave">Ave</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Periquito</dd></div>
+            <div><dt>Sexo</dt><dd>Hembra</dd></div>
+            <div><dt>Nacimiento</dt><dd>14/11/2023</dd></div>
+            <div><dt>Color</dt><dd>Verde</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Kiwi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="4">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Kiwi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-perro"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div>
+            <div>
+              <h2>Luna</h2>
+              <span class="etiqueta tipo-perro">Perro</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Golden Retriever</dd></div>
+            <div><dt>Sexo</dt><dd>Hembra</dd></div>
+            <div><dt>Nacimiento</dt><dd>12/03/2021</dd></div>
+            <div><dt>Color</dt><dd>Dorado</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Luna"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="1">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Luna"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-gato"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/><path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/><path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/><path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/><circle cx="32" cy="36" r="20" fill="#D9D4E6"/><ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/><path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 38h10M8 43l10-2M56 38H46M56 43l-10-2" stroke="#8C86A0" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+            <div>
+              <h2>Michi</h2>
+              <span class="etiqueta tipo-gato">Gato</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Mestizo</dd></div>
+            <div><dt>Sexo</dt><dd>Macho</dd></div>
+            <div><dt>Nacimiento</dt><dd>05/08/2022</dd></div>
+            <div><dt>Color</dt><dd>Atigrado</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Michi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="2">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Michi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-gato"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/><path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/><path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/><path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/><circle cx="32" cy="36" r="20" fill="#D9D4E6"/><ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/><path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 38h10M8 43l10-2M56 38H46M56 43l-10-2" stroke="#8C86A0" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+            <div>
+              <h2>Nala</h2>
+              <span class="etiqueta tipo-gato">Gato</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Siamés</dd></div>
+            <div><dt>Sexo</dt><dd>Hembra</dd></div>
+            <div><dt>Nacimiento</dt><dd>30/09/2019</dd></div>
+            <div><dt>Color</dt><dd>Crema</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Nala"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="6">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Nala"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+              <article class="tarjeta">
+          <div class="tarjeta-cabecera">
+            <div class="tarjeta-avatar tipo-perro"><svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div>
+            <div>
+              <h2>Rocky</h2>
+              <span class="etiqueta tipo-perro">Perro</span>
+            </div>
+          </div>
+          <dl>
+            <div><dt>Raza</dt><dd>Bulldog francés</dd></div>
+            <div><dt>Sexo</dt><dd>Macho</dd></div>
+            <div><dt>Nacimiento</dt><dd>20/01/2020</dd></div>
+            <div><dt>Color</dt><dd>Blanco y negro</dd></div>
+          </dl>
+          <div class="tarjeta-acciones">
+            <a href="mascota.html" class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados</a>
+            <a href="#registrar-mascota" class="btn-icono" aria-label="Editar a Rocky"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+            <form action="#">
+              <input type="hidden" name="id_mascota" value="5">
+              <button type="submit" class="btn-icono btn-peligro" aria-label="Eliminar a Rocky"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </form>
+          </div>
+        </article>
+          </section>
+  </main>
+
+  <!-- ===== Botón flotante ===== -->
+  <a href="#registrar-mascota" class="fab">
+    <span class="fab-mas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B4FB3" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+    Registrar mascota
+  </a>
+
+  <!-- ===== MODAL: Registrar / Editar mascota ===== -->
+  <div id="registrar-mascota" class="modal">
+    <a href="#" class="modal-fondo" aria-label="Cerrar"></a>
+    <div class="modal-caja ancho" role="dialog" aria-modal="true" aria-labelledby="titulo-mascota">
+      <div class="modal-cabecera">
+        <div class="modal-titulo">
+          <div>
+            <h2 id="titulo-mascota">Registrar mascota</h2>
+            <p>Elige su tipo y completa sus datos básicos.</p>
+          </div>
+        </div>
+        <a href="#" class="btn-icono" aria-label="Cerrar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </a>
+      </div>
+
+      <form action="mascotas.html" method="get" style="display: flex; flex-direction: column; gap: 22px">
+        <input type="hidden" name="id_mascota" value="0">
+
+        
+        <fieldset class="selector-tipo">
+          <legend>Tipo de mascota</legend>
+          <div class="opciones-tipo">
+                          <label class="opcion-tipo">
+                <input type="radio" name="id_tipo_mascota" value="1" checked>
+                <span class="perro"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Perro</span>
+              </label>
+                          <label class="opcion-tipo">
+                <input type="radio" name="id_tipo_mascota" value="2" >
+                <span class="gato"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/><path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/><path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/><path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/><circle cx="32" cy="36" r="20" fill="#D9D4E6"/><ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/><path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 38h10M8 43l10-2M56 38H46M56 43l-10-2" stroke="#8C86A0" stroke-width="1.4" stroke-linecap="round"/></svg>Gato</span>
+              </label>
+                          <label class="opcion-tipo">
+                <input type="radio" name="id_tipo_mascota" value="3" >
+                <span class="ave"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><path d="M30 14q2-6 6-4" stroke="#E7B94A" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="34" r="20" fill="#FBE7A1"/><ellipse cx="22" cy="40" rx="8" ry="11" fill="#F5D46E" transform="rotate(25 22 40)"/><circle cx="37" cy="29" r="2.6" fill="#3A2E2A"/><path d="M44 32l9 3-9 3Z" fill="#F4A261"/><circle cx="40" cy="38" r="3" fill="#F7B9C4"/></svg>Ave</span>
+              </label>
+                          <label class="opcion-tipo">
+                <input type="radio" name="id_tipo_mascota" value="4" >
+                <span class="roedor"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="18" r="7" fill="#E8B796"/><circle cx="46" cy="18" r="7" fill="#E8B796"/><circle cx="18" cy="18" r="3.5" fill="#F6C6D0"/><circle cx="46" cy="18" r="3.5" fill="#F6C6D0"/><ellipse cx="32" cy="36" rx="22" ry="20" fill="#F3CDB1"/><ellipse cx="32" cy="42" rx="14" ry="11" fill="#FFF3E4"/><circle cx="25" cy="32" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="32" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="38" rx="2.2" ry="1.6" fill="#E68FA3"/><circle cx="20" cy="40" r="3.5" fill="#F7B9C4"/><circle cx="44" cy="40" r="3.5" fill="#F7B9C4"/></svg>Roedor</span>
+              </label>
+                          <label class="opcion-tipo">
+                <input type="radio" name="id_tipo_mascota" value="5" >
+                <span class="otro"><svg width="44" height="44" viewBox="0 0 64 64" aria-hidden="true"><path d="M46 32 60 20v24Z" fill="#9FD3E6"/><ellipse cx="30" cy="32" rx="22" ry="15" fill="#BFE6F2"/><path d="M26 18q6 6 0 28" stroke="#9FD3E6" stroke-width="2" fill="none"/><circle cx="17" cy="29" r="2.6" fill="#3A2E2A"/><path d="M10 36q3 2 6 0" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>Otro</span>
+              </label>
+                      </div>
+        </fieldset>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="m-nombre">Nombre</label>
+            <input id="m-nombre" name="nombre" type="text" placeholder="Ej. Luna" maxlength="50" value="" required>
+          </div>
+          <div class="campo">
+            <label for="m-raza">Raza</label>
+            <input id="m-raza" name="raza" type="text" placeholder="Ej. Golden Retriever" maxlength="50" value="">
+          </div>
+          <div class="campo">
+            <label for="m-sexo">Sexo</label>
+                        <select id="m-sexo" name="sexo" required>
+              <option value="">Selecciona…</option>
+              <option value="H" >Hembra</option>
+              <option value="M" >Macho</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="m-nac">Fecha de nacimiento</label>
+            <input id="m-nac" name="fecha_nacimiento" type="date" max="2026-11-09" value="">
+          </div>
+          <div class="campo">
+            <label for="m-color">Color</label>
+            <input id="m-color" name="color" type="text" placeholder="Ej. Dorado" maxlength="30" value="">
+          </div>
+          <div class="campo">
+            <label for="m-peso">Peso (kg) <span class="opcional">· opcional</span></label>
+            <input id="m-peso" name="peso" type="number" step="0.01" min="0.01" placeholder="Ej. 24" value="">
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="m-foto">Foto <span class="opcional">· opcional (JPG, PNG o WEBP, máx. 3 MB)</span></label>
+          <div class="subir-foto">
+                        <input id="m-foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+          </div>
+                  </div>
+
+        <div class="modal-acciones">
+          <a href="#" class="btn btn-secundario">Cancelar</a>
+          <button type="submit" class="btn btn-primario">Guardar mascota</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <script>
+    // ==========================================
+    // 1. VERIFICAR SESIÓN Y MOSTRAR DATOS DEL USUARIO
+    // ==========================================
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (!usuarioGuardado) {
+      window.location.href = 'index.html';
+    }
+    const usuario = JSON.parse(usuarioGuardado);
+
+    const summaryCuenta = document.querySelector('.cuenta summary');
+    if (summaryCuenta) {
+      summaryCuenta.innerHTML = summaryCuenta.innerHTML.replace('María', usuario.nombre);
+    }
+    const cuentaDatosStrong = document.querySelector('.cuenta-datos strong');
+    const cuentaDatosSpan = document.querySelector('.cuenta-datos span');
+    if (cuentaDatosStrong) cuentaDatosStrong.textContent = usuario.nombre + ' ' + (usuario.apellido || '');
+    if (cuentaDatosSpan) cuentaDatosSpan.textContent = usuario.correo;
+
+    const btnCerrarSesion = document.querySelector('a[href="index.html"]');
+    if (btnCerrarSesion) {
+      btnCerrarSesion.addEventListener('click', () => localStorage.removeItem('usuario'));
+    }
+
+    // ==========================================
+    // 2. CONFIGURACIÓN DE ICONOS Y TIPOS DE MASCOTA
+    // ==========================================
+    const tiposInfo = {
+      1: {
+        nombre: 'Perro', clase: 'tipo-perro',
+        svg: '<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>'
+      },
+      2: {
+        nombre: 'Gato', clase: 'tipo-gato',
+        svg: '<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/><path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/><path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/><path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/><circle cx="32" cy="36" r="20" fill="#D9D4E6"/><ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/><path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 38h10M8 43l10-2M56 38H46M56 43l-10-2" stroke="#8C86A0" stroke-width="1.4" stroke-linecap="round"/></svg>'
+      },
+      3: {
+        nombre: 'Ave', clase: 'tipo-ave',
+        svg: '<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M30 14q2-6 6-4" stroke="#E7B94A" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="34" r="20" fill="#FBE7A1"/><ellipse cx="22" cy="40" rx="8" ry="11" fill="#F5D46E" transform="rotate(25 22 40)"/><circle cx="37" cy="29" r="2.6" fill="#3A2E2A"/><path d="M44 32l9 3-9 3Z" fill="#F4A261"/><circle cx="40" cy="38" r="3" fill="#F7B9C4"/></svg>'
+      },
+      4: {
+        nombre: 'Roedor', clase: 'tipo-roedor',
+        svg: '<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="18" r="7" fill="#E8B796"/><circle cx="46" cy="18" r="7" fill="#E8B796"/><circle cx="18" cy="18" r="3.5" fill="#F6C6D0"/><circle cx="46" cy="18" r="3.5" fill="#F6C6D0"/><ellipse cx="32" cy="36" rx="22" ry="20" fill="#F3CDB1"/><ellipse cx="32" cy="42" rx="14" ry="11" fill="#FFF3E4"/><circle cx="25" cy="32" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="32" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="38" rx="2.2" ry="1.6" fill="#E68FA3"/><circle cx="20" cy="40" r="3.5" fill="#F7B9C4"/><circle cx="44" cy="40" r="3.5" fill="#F7B9C4"/></svg>'
+      },
+      5: {
+        nombre: 'Otro', clase: 'tipo-otro',
+        svg: '<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><path d="M46 32 60 20v24Z" fill="#9FD3E6"/><ellipse cx="30" cy="32" rx="22" ry="15" fill="#BFE6F2"/><path d="M26 18q6 6 0 28" stroke="#9FD3E6" stroke-width="2" fill="none"/><circle cx="17" cy="29" r="2.6" fill="#3A2E2A"/><path d="M10 36q3 2 6 0" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>'
+      }
+    };
+
+    let listaMascotas = [];
+    const gridMascotas = document.querySelector('.grid-mascotas');
+    const contadorTexto = document.querySelector('.contenido-cabecera p');
+
+    // ==========================================
+    // 3. CARGAR MASCOTAS DESDE LA API
+    // ==========================================
+    async function cargarMascotas() {
+      try {
+        const res = await fetch('/api/usuarios/' + usuario.id_usuario + '/mascotas');
+        if (res.status === 404) {
+          listaMascotas = [];
+          renderizarMascotas([]);
+          return;
+        }
+        listaMascotas = await res.json();
+        renderizarMascotas(listaMascotas);
+      } catch (error) {
+        console.error('Error al cargar mascotas:', error);
+      }
+    }
+
+    function renderizarMascotas(mascotas) {
+      contadorTexto.textContent = 'Tienes ' + mascotas.length + ' mascota' + (mascotas.length === 1 ? '' : 's') + ' registrada' + (mascotas.length === 1 ? '' : 's') + '.';
+
+      if (mascotas.length === 0) {
+        gridMascotas.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #5E5675;">Aún no tienes mascotas registradas. ¡Haz clic en <strong>+ Registrar mascota</strong> para agregar la primera!</p>';
+        return;
+      }
+
+      gridMascotas.innerHTML = mascotas.map(m => {
+        const tipo = tiposInfo[m.id_tipo_mascota] || tiposInfo[5];
+        const sexoTexto = m.sexo === 'H' ? 'Hembra' : (m.sexo === 'M' ? 'Macho' : (m.sexo || 'No especificado'));
+        const fechaTexto = m.fecha_nacimiento ? m.fecha_nacimiento.split('-').reverse().join('/') : 'Sin fecha';
+
+        return '<article class="tarjeta">' +
+          '<div class="tarjeta-cabecera">' +
+            '<div class="tarjeta-avatar ' + tipo.clase + '">' + tipo.svg + '</div>' +
+            '<div><h2>' + m.nombre + '</h2><span class="etiqueta ' + tipo.clase + '">' + tipo.nombre + '</span></div>' +
+          '</div>' +
+          '<dl>' +
+            '<div><dt>Raza</dt><dd>' + (m.raza || 'Mestizo') + '</dd></div>' +
+            '<div><dt>Sexo</dt><dd>' + sexoTexto + '</dd></div>' +
+            '<div><dt>Nacimiento</dt><dd>' + fechaTexto + '</dd></div>' +
+            '<div><dt>Color</dt><dd>' + (m.color || 'No especificado') + '</dd></div>' +
+          '</dl>' +
+          '<div class="tarjeta-acciones">' +
+            '<a href="mascota.html?id=' + m.id_mascota + '" class="btn">' +
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg> Cuidados' +
+            '</a>' +
+            '<a href="#registrar-mascota" onclick="prepararEdicion(' + m.id_mascota + ')" class="btn-icono" aria-label="Editar a ' + m.nombre + '">' +
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>' +
+            '</a>' +
+            '<button type="button" onclick="eliminarMascota(' + m.id_mascota + ', \'' + m.nombre + '\')" class="btn-icono btn-peligro" aria-label="Eliminar a ' + m.nombre + '">' +
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</article>';
+      }).join('');
+    }
+
+    // ==========================================
+    // 4. BUSCADOR EN TIEMPO REAL
+    // ==========================================
+    const inputBuscar = document.getElementById('buscar');
+    document.querySelector('.buscador').addEventListener('submit', e => e.preventDefault());
+    inputBuscar.addEventListener('input', (e) => {
+      const texto = e.target.value.toLowerCase().trim();
+      const filtradas = listaMascotas.filter(m =>
+        m.nombre.toLowerCase().includes(texto) ||
+        (m.raza && m.raza.toLowerCase().includes(texto))
+      );
+      renderizarMascotas(filtradas);
+    });
+
+    // ==========================================
+    // 5. CREAR Y EDITAR MASCOTA (MODAL)
+    // ==========================================
+    const formMascota = document.querySelector('#registrar-mascota form');
+    const tituloModal = document.getElementById('titulo-mascota');
+
+    document.querySelector('.fab').addEventListener('click', () => {
+      formMascota.reset();
+      formMascota.querySelector('input[name="id_mascota"]').value = '0';
+      tituloModal.textContent = 'Registrar mascota';
+    });
+
+    window.prepararEdicion = (id) => {
+      const m = listaMascotas.find(item => item.id_mascota === id);
+      if (!m) return;
+      tituloModal.textContent = 'Editar a ' + m.nombre;
+      formMascota.querySelector('input[name="id_mascota"]').value = m.id_mascota;
+      const radio = formMascota.querySelector('input[name="id_tipo_mascota"][value="' + m.id_tipo_mascota + '"]');
+      if (radio) radio.checked = true;
+      document.getElementById('m-nombre').value = m.nombre || '';
+      document.getElementById('m-raza').value = m.raza || '';
+      document.getElementById('m-sexo').value = m.sexo || '';
+      document.getElementById('m-nac').value = m.fecha_nacimiento || '';
+      document.getElementById('m-color').value = m.color || '';
+document.getElementById('m-peso').value = m.peso || '';
+};
+formMascota.addEventListener('submit', async (e) => {
+e.preventDefault();
+const idMascota = formMascota.querySelector('input[name="id_mascota"]').value;
+const esEdicion = idMascota !== '0' && idMascota !== '';
+
+const payload = {
+id_usuario: usuario.id_usuario,
+id_tipo_mascota: parseInt(formMascota.querySelector('input[name="id_tipo_mascota"]:checked').value),
+nombre: document.getElementById('m-nombre').value.trim(),
+raza: document.getElementById('m-raza').value.trim() || null,
+sexo: document.getElementById('m-sexo').value,
+fecha_nacimiento: document.getElementById('m-nac').value || null,
+color: document.getElementById('m-color').value.trim() || null,
+peso: document.getElementById('m-peso').value ? parseFloat(document.getElementById('m-peso').value) : null
+};
+
+try {
+const url = esEdicion ? '/api/mascotas/' + idMascota : '/api/mascotas';
+const metodo = esEdicion ? 'PUT' : 'POST';
+const res = await fetch(url, {
+method: metodo,
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
+});
+
+if (!res.ok) {
+const err = await res.json();
+alert(err.error || err.mensaje || 'Error al guardar la mascota');
+return;
+}
+window.location.hash = '';
+await cargarMascotas();
+} catch (error) {
+alert('Error de conexión con el servidor');
+console.error(error);
+}
+});
+
+// ==========================================
+// 6. ELIMINAR MASCOTA
+// ==========================================
+window.eliminarMascota = async (id, nombre) => {
+if (!confirm('¿Estás seguro de eliminar a ' + nombre + '? También se borrarán sus cuidados.')) return;
+try {
+const res = await fetch('/api/mascotas/' + id, { method: 'DELETE' });
+if (!res.ok) {
+alert('No se pudo eliminar la mascota.');
+return;
+}
+await cargarMascotas();
+} catch (error) {
+alert('Error de conexión al eliminar.');
+}
+};
+// Iniciar carga al abrir la página
+cargarMascotas();
+</script>
+</body>
+</html>

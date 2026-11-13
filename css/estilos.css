@@ -1,0 +1,721 @@
+/* ===========================
+   Huellitas Digitales - Estilos
+   =========================== */
+
+:root {
+  --lila: #C9B8F0;
+  --lila-claro: #EDE6FB;
+  --lila-suave: #F3EEFB;
+  --lila-fuerte: #6B4FB3;
+  --lila-oscuro: #4B3592;
+  --menta: #DFF3EA;
+  --durazno: #FFE6D5;
+  --rosa: #FCE4EA;
+  --amarillo: #FFF4CC;
+  --celeste: #DDF1F8;
+  --fondo: #FBF7F4;
+  --blanco: #FFFFFF;
+  --texto: #2B2147;
+  --texto-suave: #5E5675;
+  --texto-medio: #4A3F6B;
+  --borde: #D8D0E6;
+  --borde-suave: #EEE7F5;
+  --sombra: 0 20px 50px rgba(43, 33, 71, 0.18);
+  --radio: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+a { color: var(--lila-fuerte); }
+a:hover { color: var(--lila-oscuro); }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--lila-fuerte);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  height: 48px;
+  padding: 0 22px;
+  border-radius: var(--radio);
+  border: 0;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-primario { background: var(--lila); color: var(--texto); }
+.btn-primario:hover { background: #BCA8EC; color: var(--texto); }
+.btn-secundario { background: var(--blanco); color: var(--texto); border: 1px solid var(--borde); font-weight: 600; }
+.btn-secundario:hover { background: var(--lila-suave); color: var(--texto); }
+.btn-bloque { width: 100%; height: 50px; font-size: 16px; }
+
+.btn-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  color: var(--lila-fuerte);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.btn-icono {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--radio);
+  border: 0;
+  background: var(--lila-suave);
+  color: var(--texto);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-peligro { background: var(--rosa); color: #9B2C4A; }
+
+/* ---------- Formularios ---------- */
+.campo { display: flex; flex-direction: column; gap: 8px; }
+.campo label { font-size: 14px; font-weight: 600; }
+.campo .opcional { font-weight: 500; color: var(--texto-suave); }
+.campo input,
+.campo select,
+.campo textarea {
+  height: 48px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 0 14px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--texto);
+  background: var(--blanco);
+}
+.campo textarea { height: auto; padding: 12px 14px; resize: vertical; }
+
+.fila-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ---------- Logo ---------- */
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--texto); }
+.logo-icono {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 12px;
+  background: var(--lila-claro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-texto { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+
+/* =====================================
+   LOGIN (index.html)
+   ===================================== */
+.login {
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.login-ilustracion {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 420px;
+  background: var(--lila-claro);
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+.login-ilustracion .logo-icono { background: var(--blanco); }
+.burbuja { position: absolute; border-radius: 50%; }
+.burbuja-menta { width: 260px; height: 260px; background: var(--menta); right: -70px; top: -60px; }
+.burbuja-durazno { width: 180px; height: 180px; background: var(--durazno); left: -50px; bottom: 120px; }
+.login-ilustracion > *:not(.burbuja) { position: relative; }
+.login-dibujo { display: flex; justify-content: center; }
+.login-dibujo svg { width: 100%; max-width: 380px; height: auto; }
+.login-mensaje { max-width: 460px; display: flex; flex-direction: column; gap: 14px; }
+.login-mensaje h1 { margin: 0; font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.8px; }
+.login-mensaje p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--texto-medio); }
+
+.login-formulario {
+  flex: 1 1 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 32px;
+}
+.login-formulario form { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 22px; }
+.titulo-form { display: flex; flex-direction: column; gap: 8px; }
+.titulo-form h2 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+.titulo-form p { margin: 0; font-size: 15px; color: var(--texto-suave); }
+.texto-centro { margin: 0; font-size: 14px; color: var(--texto-suave); text-align: center; }
+
+/* =====================================
+   MODALES (con :target, sin JavaScript)
+   ===================================== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(43, 33, 71, 0.35);
+  padding: 40px 24px;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+.modal:target { display: flex; }
+
+/* fondo clicable para cerrar */
+.modal-fondo { position: fixed; inset: 0; }
+
+.modal-caja {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  margin: auto 0;
+  background: var(--blanco);
+  border-radius: 22px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: var(--sombra);
+}
+.modal-caja.ancho { max-width: 680px; }
+.modal-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.modal-titulo { display: flex; align-items: center; gap: 14px; }
+.modal-titulo h2 { margin: 0; font-size: 24px; font-weight: 800; }
+.modal-titulo p { margin: 4px 0 0; font-size: 14px; color: var(--texto-suave); }
+.modal-avatar {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 16px;
+  background: var(--durazno);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-acciones {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--lila-suave);
+  padding-top: 20px;
+}
+
+/* =====================================
+   PANEL: MIS MASCOTAS (mascotas.html)
+   ===================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--blanco);
+  border-bottom: 1px solid var(--borde-suave);
+}
+.navbar-contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  min-height: 72px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+.navbar-izquierda { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.navbar-menu { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.navbar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--texto-medio);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+}
+.navbar-menu a[aria-current="page"] { background: var(--lila-suave); color: var(--texto); font-weight: 700; }
+
+/* Dropdown del avatar con <details> */
+.cuenta { position: relative; }
+.cuenta summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 12px 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--borde-suave);
+  background: var(--blanco);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cuenta summary::-webkit-details-marker { display: none; }
+.cuenta summary .flecha { transition: transform 0.2s; }
+.cuenta[open] summary .flecha { transform: rotate(180deg); }
+.cuenta-menu {
+  position: absolute;
+  right: 0;
+  top: 60px;
+  width: 260px;
+  background: var(--blanco);
+  border: 1px solid var(--borde-suave);
+  border-radius: 18px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(43, 33, 71, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cuenta-datos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 14px;
+  border-bottom: 1px solid var(--lila-suave);
+  margin-bottom: 6px;
+}
+.cuenta-datos strong { display: block; font-size: 14px; }
+.cuenta-datos span { font-size: 12px; color: var(--texto-suave); }
+.cuenta-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  padding: 0 8px;
+  border-radius: 12px;
+  color: var(--texto);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.cuenta-menu a:hover { background: var(--lila-suave); color: var(--texto); }
+.icono-cuadro {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bg-durazno { background: var(--durazno); }
+.bg-rosa { background: var(--rosa); }
+
+/* Contenido principal */
+.contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 40px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.contenido-cabecera h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+.contenido-cabecera p { margin: 6px 0 0; font-size: 15px; color: var(--texto-suave); }
+
+.buscador { position: relative; max-width: 420px; }
+.buscador svg { position: absolute; left: 14px; top: 15px; }
+.buscador input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 0 14px 0 42px;
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--blanco);
+}
+
+/* Tarjetas de mascotas */
+.grid-mascotas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 18px;
+}
+.tarjeta {
+  background: var(--blanco);
+  border: 1px solid var(--borde-suave);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tarjeta-cabecera { display: flex; align-items: center; gap: 14px; }
+.tarjeta-avatar {
+  width: 60px;
+  height: 60px;
+  flex: none;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tarjeta h2 { margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+.etiqueta { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.tarjeta dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+  font-size: 13px;
+}
+.tarjeta dt { color: var(--texto-suave); }
+.tarjeta dd { margin: 2px 0 0; font-weight: 600; }
+.tarjeta-acciones { display: flex; gap: 8px; border-top: 1px solid var(--lila-suave); padding-top: 14px; }
+.tarjeta-acciones .btn { flex: 1; height: 44px; background: var(--lila-suave); color: var(--texto); font-size: 14px; }
+
+/* Colores por tipo de mascota */
+.tipo-perro { background: var(--durazno); color: #7A3412; }
+.tipo-gato { background: var(--lila-claro); color: var(--lila-oscuro); }
+.tipo-ave { background: var(--amarillo); color: #6B5100; }
+.tipo-roedor { background: var(--rosa); color: #8A2846; }
+.tipo-otro { background: var(--celeste); color: #1D5B70; }
+
+/* Botón flotante */
+.fab {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 30;
+  height: 62px;
+  padding: 0 26px 0 12px;
+  border-radius: 999px;
+  background: var(--lila);
+  color: var(--texto);
+  font-size: 16px;
+  font-weight: 800;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 28px rgba(107, 79, 179, 0.32);
+  transition: transform 0.15s;
+}
+.fab:hover { transform: translateY(-2px); color: var(--texto); }
+.fab-mas {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blanco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Selector de tipo (radios estilizados) */
+.selector-tipo { border: 0; margin: 0; padding: 0; }
+.selector-tipo legend { font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 12px; }
+.opciones-tipo {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.opcion-tipo input { position: absolute; opacity: 0; pointer-events: none; }
+.opcion-tipo span {
+  min-height: 92px;
+  border-radius: 16px;
+  padding: 10px 6px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.opcion-tipo input:checked + span { border: 2px solid var(--lila-fuerte); }
+.opcion-tipo input:checked + span.perro { background: var(--durazno); }
+.opcion-tipo input:checked + span.gato { background: var(--lila-claro); }
+.opcion-tipo input:checked + span.ave { background: var(--amarillo); }
+.opcion-tipo input:checked + span.roedor { background: var(--rosa); }
+.opcion-tipo input:checked + span.otro { background: var(--celeste); }
+.opcion-tipo input:focus-visible + span { outline: 2px solid var(--lila-fuerte); outline-offset: 2px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .login-ilustracion { padding: 32px 24px; }
+  .login-mensaje h1 { font-size: 28px; }
+  .fila-2 { grid-template-columns: 1fr; }
+  .opciones-tipo { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .navbar-contenido, .contenido { padding-left: 20px; padding-right: 20px; }
+  .fab { right: 16px; bottom: 16px; }
+  .modal-caja { padding: 22px; }
+}
+
+/* ---------- Mensajes y estado vacío (versión PHP) ---------- */
+.alerta {
+  border-radius: var(--radio);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.alerta-error { background: var(--rosa); color: #8A2846; }
+.alerta-ok { background: var(--menta); color: #1F5A45; }
+
+.tarjeta-acciones form { display: contents; }
+
+.vacio {
+  background: var(--blanco);
+  border: 1px dashed var(--borde);
+  border-radius: 20px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--texto-suave);
+}
+.vacio p { margin: 0; font-size: 15px; }
+
+/* =====================================
+   v2: FOTOS de las mascotas
+   ===================================== */
+.tarjeta-avatar, .ficha-foto { overflow: hidden; }
+.foto-mascota { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.subir-foto {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+  padding: 12px;
+  background: var(--fondo);
+}
+.subir-foto img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex: none; }
+.subir-foto input[type="file"] { font-family: inherit; font-size: 14px; color: var(--texto-suave); min-width: 0; }
+.subir-foto input[type="file"]::file-selector-button {
+  height: 40px;
+  padding: 0 16px;
+  margin-right: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--lila-claro);
+  color: var(--texto);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--texto-medio); cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--lila-fuerte); }
+
+.tarjeta-acciones .btn-icono { background: var(--lila-suave); }
+
+/* =====================================
+   v2: FICHA de la mascota y CUIDADOS
+   ===================================== */
+.volver {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.ficha {
+  background: var(--blanco);
+  border: 1px solid var(--borde-suave);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+.ficha-foto {
+  width: 160px;
+  height: 160px;
+  flex: none;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ficha-datos { flex: 1 1 320px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.ficha-datos h1 { margin: 0 0 6px; font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
+.ficha-datos dl {
+  margin: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  font-size: 14px;
+}
+.ficha-datos dt { color: var(--texto-suave); font-size: 13px; }
+.ficha-datos dd { margin: 2px 0 0; font-weight: 700; }
+
+.pendientes {
+  background: var(--amarillo);
+  border-radius: 18px;
+  padding: 16px 20px;
+  color: #5C4500;
+}
+.pendientes h2 { margin: 0 0 8px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.pendientes ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.pendientes li.vencido { color: #8A2846; }
+
+.cuidados-layout { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.historial { flex: 999 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.historial-cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.historial-cabecera h2, .panel-form h2 { margin: 0; font-size: 20px; font-weight: 800; }
+
+.pestanas { display: flex; gap: 6px; flex-wrap: wrap; }
+.pestanas a {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  color: var(--texto);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pestanas a span { font-size: 12px; background: var(--lila-suave); border-radius: 999px; padding: 1px 8px; }
+.pestanas a[aria-current="page"] { background: var(--lila); border-color: var(--lila); }
+.pestanas a[aria-current="page"] span { background: var(--blanco); }
+
+.lista-cuidados { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.cuidado {
+  background: var(--blanco);
+  border: 1px solid var(--borde-suave);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.cuidado-icono {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.es-vacuna .cuidado-icono { background: var(--celeste); color: #1D5B70; }
+.es-bano .cuidado-icono { background: var(--menta); color: #1F5A45; }
+.cuidado-texto { flex: 1; min-width: 0; }
+.cuidado-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cuidado-titulo strong { font-size: 16px; }
+.cuidado-texto p { margin: 4px 0 0; font-size: 14px; color: var(--texto-suave); }
+.cuidado-texto .cuidado-nota { color: var(--texto-medio); font-style: italic; }
+.etq-vacuna { background: var(--celeste); color: #1D5B70; }
+.etq-bano { background: var(--menta); color: #1F5A45; }
+
+.panel-form {
+  flex: 1 1 320px;
+  background: var(--blanco);
+  border: 1px solid var(--borde-suave);
+  border-radius: 20px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 96px;
+}
+.form-cuidado { display: flex; flex-direction: column; gap: 16px; }
+
+/* Selector Vacuna / Baño */
+.selector-cuidado {
+  border: 0;
+  margin: 0;
+  padding: 4px;
+  background: var(--lila-suave);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.selector-cuidado input { position: absolute; opacity: 0; pointer-events: none; }
+.selector-cuidado span {
+  height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.selector-cuidado input:checked + span { background: var(--blanco); box-shadow: 0 2px 8px rgba(43, 33, 71, 0.1); }
+.selector-cuidado input:focus-visible + span { outline: 2px solid var(--lila-fuerte); outline-offset: 2px; }
+
+/* Las etiquetas cambian según se elija Vacuna o Baño (solo CSS) */
+.form-cuidado .solo-bano { display: none; }
+.form-cuidado:has(#t-bano:checked) .solo-bano { display: inline; }
+.form-cuidado:has(#t-bano:checked) .solo-vacuna { display: none; }
+
+@media (max-width: 640px) {
+  .ficha-foto { width: 120px; height: 120px; }
+  .panel-form { position: static; }
+}
+.panel-form .fila-2 { grid-template-columns: 1fr; }
+
+/* ---------- Versión HTML pura: filtro de pestañas con :target ---------- */
+.tab-todos { background: var(--lila) !important; border-color: var(--lila) !important; }
+body:has(#solo-vacunas:target) .tab-todos,
+body:has(#solo-banos:target) .tab-todos { background: var(--blanco) !important; border-color: var(--borde) !important; }
+body:has(#solo-vacunas:target) .tab-vacunas,
+body:has(#solo-banos:target) .tab-banos { background: var(--lila); border-color: var(--lila); }
+body:has(#solo-vacunas:target) .es-bano,
+body:has(#solo-banos:target) .es-vacuna { display: none; }
+#todos, #solo-vacunas, #solo-banos { position: fixed; top: 0; }
