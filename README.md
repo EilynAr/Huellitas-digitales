@@ -17,6 +17,7 @@ Backend en Node.js + Express 5 + Sequelize, con MySQL 8.4 ejecutándose en Docke
 | Frontend | HTML + CSS estático (`index.html`, `mascotas.html`, `mascota.html`) |
 | Hash de contraseñas | bcrypt / bcryptjs |
 | Documentación | OpenAPI 3.0.3 + Swagger UI (`swagger-jsdoc`, `swagger-ui-express`) |
+| Pruebas | Jest 30 + Supertest 7 (modelos mockeados, sin base de datos) |
 
 ---
 
@@ -169,6 +170,55 @@ Los endpoints escriben en la base real del contenedor, no en una copia: los `POS
 
 ---
 
+## Pruebas
+
+El proyecto usa **Jest** + **Supertest** para pruebas de la API. Los modelos de Sequelize se **mockean**, así que la suite no abre conexión a MySQL ni toca datos: se puede correr con el contenedor apagado.
+
+```bash
+npm test              # suite completa
+npm run test:watch    # modo interactivo
+npm run test:coverage # suite + reporte de cobertura
+```
+
+**30 pruebas en 3 suites**, agrupadas por dominio: `tests/usuarios.test.js`, `tests/mascotas.test.js` y `tests/cuidados.test.js` (este último cubre también catálogos y la especificación OpenAPI). Cada endpoint tiene su caso feliz y sus ramas de error principales (`400` por datos inválidos, `401` por credenciales, `404` por recurso inexistente y `500` cuando la base falla).
+
+`tests/factories.js` arma instancias falsas de los modelos con la forma que devolvería Sequelize (incluido `toJSON()` y las instancias con `update`/`destroy`).
+
+### Cobertura
+
+El reporte se genera en `coverage/` (`index.html` navegable y `lcov.info`). Está en `.gitignore` porque es un artefacto derivado: se regenera con `npm run test:coverage`.
+
+```bash
+npm run test:coverage          # genera el reporte y lo imprime en consola
+start coverage/index.html      # Windows: abre el reporte HTML navegable
+open coverage/index.html       # macOS / Linux
+```
+
+El reporte HTML permite navegar archivo por archivo y ver exactamente qué líneas quedaron sin ejecutar; `coverage/lcov.info` es el formato que consumen herramientas externas (SonarQube, Codecov, la extensión Coverage Gutters de VS Code).
+
+| Archivo | Sentencias | Ramas | Funciones | Líneas |
+| --- | --- | --- | --- | --- |
+| `app.js` | 100% | 100% | 100% | 100% |
+| `config/swagger.js` | 100% | 50% | 100% | 100% |
+| `routes/api.js` | 71.51% | 80% | 77.77% | 71.51% |
+| **Total** | **74.87%** | **78.84%** | **78.94%** | **74.74%** |
+
+Dos aclaraciones sobre esos números:
+
+- **Los modelos no se cuentan**: se mockean por diseño, así que reportarían 0% sin decir nada útil. `config/bd.js` tampoco se incluye porque solo se ejecuta contra una base real.
+- **Las líneas sin cubrir de `routes/api.js` (632-654, 716-735, 799-827) son las rutas duplicadas del final del archivo**, que nunca se ejecutan. El resto son los `catch` genéricos que devuelven `500`. La documentación de esas rutas duplicadas tampoco se genera en Swagger por el mismo motivo.
+
+### Verificación de que la suite no pasa de casualidad
+
+Se comprobó con una mutación: al invertir la condición de `bcrypt.compare` en el login (`routes/api.js`), 2 pruebas pasaron a rojo. Restaurado el código, vuelven a 30/30 en verde.
+
+```text
+Test Suites: 3 passed, 3 total
+Tests:       30 passed, 30 total
+```
+
+---
+
 ## Estructura del proyecto
 
 ```text
@@ -178,20 +228,29 @@ Los endpoints escriben en la base real del contenedor, no en una copia: los `POS
 │   ├── bd.js                        # Instancia de Sequelize y verificación de conexión
 │   └── swagger.js                   # Definición OpenAPI 3.0.3 + esquemas reutilizables
 ├── models/
+│   ├── index.js                     # Carga los modelos y define las asociaciones
 │   ├── Usuario.js                   # tabla: usuario
 │   ├── Mascota.js                   # tabla: mascotas
 │   ├── Cuidado.js                   # tabla: cuidados
 │   ├── TipoUsuario.js               # tabla: tipo_usuario
 │   └── TipoMascota.js               # tabla: tipo_mascota
 ├── routes/
-│   └── api.js                       # Todos los endpoints REST
+│   └── api.js                       # Todos los endpoints REST + anotaciones @openapi
+├── tests/
+│   ├── factories.js                 # Instancias falsas de los modelos
+│   ├── usuarios.test.js
+│   ├── mascotas.test.js
+│   └── cuidados.test.js             # Cuidados, catálogos y especificación OpenAPI
 ├── css/
 │   └── estilos.css
 ├── index.html / mascotas.html / mascota.html
-├── index.js                         # Punto de entrada: Express, estáticos y asociaciones
+├── app.js                           # Configura Express (middlewares, estáticos, rutas) y se exporta
+├── index.js                         # Arranque: conecta a MySQL y escucha en el puerto
 ├── docker-compose.yml               # MySQL 8.4 + importación del dump
 └── .env.example                     # Plantilla de variables de entorno
 ```
+
+`app.js` e `index.js` están separados a propósito: `app.js` exporta la app de Express sin escuchar, que es lo que consume Supertest; `index.js` es el que abre la conexión y levanta el servidor.
 
 ---
 
@@ -209,6 +268,5 @@ Los endpoints escriben en la base real del contenedor, no en una copia: los `POS
 
 ## Notas conocidas del código
 
-- `routes/api.js` registra varias rutas duplicadas (`POST /usuarios/login`, `PUT|DELETE /mascotas/:id_mascota`, `PUT /cuidados/:id_cuidado`) y contiene dos `module.exports = router` intermedios. Express usa la primera coincidencia, así que las versiones posteriores son código muerto.
+- `routes/api.js` registra varias rutas duplicadas (`POST /usuarios/login`, `PUT|DELETE /mascotas/:id_mascota`, `PUT /cuidados/:id_cuidado`) y contiene dos `module.exports = router` intermedios. Express usa la primera coincidencia, así que las versiones posteriores son código muerto: no se ejecutan, no se documentan en Swagger y son las principales líneas sin cubrir del reporte de cobertura.
 - No hay autenticación por token: el login devuelve los datos del usuario, pero los endpoints no están protegidos.
-- No hay pruebas automatizadas (`npm test` sigue siendo el placeholder de npm).
