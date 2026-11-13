@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: huellitas-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-huellitas_root}
+      MYSQL_DATABASE: ${DB_NAME:-huellitas_digitales}
+      MYSQL_USER: ${DB_USER:-huellitas}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-huellitas}
+      MYSQL_ROOT_HOST: "%"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - huellitas-mysql-data:/var/lib/mysql
+      # Los scripts de este directorio se ejecutan solo al crear el volumen por primera vez
+      - ./bd:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+volumes:
+  huellitas-mysql-data:
