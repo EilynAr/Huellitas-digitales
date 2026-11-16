@@ -2,20 +2,45 @@
   "info": {
     "_postman_id": "6a1f8f2e-2c1a-4f7b-9d3e-huellitas0001",
     "name": "Huellitas Digitales API",
-    "description": "Colección de la API REST de Huellitas Digitales.\n\n**Requisitos**\n1. `docker compose up -d` (MySQL)\n2. `npm start` (API en http://localhost:3000)\n\n**Variables**: la colección trae valores por defecto. Los ids (`idUsuario`, `idMascota`, `idCuidadoCreado`) se van completando solos: ejecutá la colección en orden (Runner) o cada request que los necesita depende del anterior.\n\n**Documentación viva**: http://localhost:3000/api-docs",
+    "description": "Colección de la API REST de Huellitas Digitales.\n\n**Requisitos**\n1. `docker compose up -d` (MySQL)\n2. `npm start` (API en http://localhost:3000)\n\n**Autenticación**: la API usa JWT. Ejecutá primero `Login` (o `Registro`): el test del request guarda el `token` en las variables de la colección y el resto de las peticiones lo envía como `Authorization: Bearer {{token}}`.\n\n**Variables**: los ids (`idUsuario`, `idMascota`, `idCuidadoCreado`) también se completan solos. Ejecutá la colección en orden (Runner) o cada request que los necesita depende del anterior.\n\n**Documentación viva**: http://localhost:3000/api-docs (botón Authorize con el token del login).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
     "type": "noauth"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000" },
-    { "key": "correo", "value": "eilyn.angarita@correo.com" },
-    { "key": "contrasena", "value": "123456" },
-    { "key": "idUsuario", "value": "6" },
-    { "key": "idMascota", "value": "11" },
-    { "key": "idMascotaCreada", "value": "" },
-    { "key": "idCuidadoCreado", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "correo",
+      "value": "eilyn.angarita@correo.com"
+    },
+    {
+      "key": "contrasena",
+      "value": "123456"
+    },
+    {
+      "key": "idUsuario",
+      "value": "6"
+    },
+    {
+      "key": "idMascota",
+      "value": "11"
+    },
+    {
+      "key": "idMascotaCreada",
+      "value": ""
+    },
+    {
+      "key": "idCuidadoCreado",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
   ],
   "item": [
     {
@@ -46,7 +71,10 @@
                   "pm.test('asigna tipo Usuario por defecto', () => pm.expect(json.usuario.id_tipo_usuario).to.eql(2));",
                   "pm.test('el correo coincide con el enviado', () => pm.expect(json.usuario.correo).to.eql(pm.vars.get('correoRegistro')));",
                   "",
-                  "pm.collectionVariables.set('idUsuarioNuevo', String(json.usuario.id_usuario));"
+                  "pm.collectionVariables.set('idUsuarioNuevo', String(json.usuario.id_usuario));",
+                  "",
+                  "pm.collectionVariables.set('token', json.token);",
+                  "pm.test('emite un token JWT', () => pm.expect(json.token).to.be.a('string').and.not.empty);"
                 ]
               }
             }
@@ -54,18 +82,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Prueba\",\n  \"apellido\": \"Postman\",\n  \"correo\": \"{{correoRegistro}}\",\n  \"contrasena\": \"123456\",\n  \"id_tipo_usuario\": 2\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/usuarios/registro",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "usuarios", "registro"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "registro"
+              ]
             },
             "description": "Crea un usuario con la contraseña encriptada (bcrypt). El correo usa la variable dinámica {{$timestamp}} para no chocar con el índice único de `usuario.correo`.\n\n**400** si el correo ya existe."
           }
@@ -90,7 +134,10 @@
                   "",
                   "pm.test('guarda idUsuario para el resto de la coleccion', () => {",
                   "  pm.expect(pm.collectionVariables.get('idUsuario')).to.be.a('string').and.not.empty;",
-                  "});"
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('token', json.token);",
+                  "pm.test('emite un token JWT', () => pm.expect(json.token).to.be.a('string').and.not.empty);"
                 ]
               }
             }
@@ -98,20 +145,36 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"correo\": \"{{correo}}\",\n  \"contrasena\": \"{{contrasena}}\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/usuarios/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "usuarios", "login"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "login"
+              ]
             },
-            "description": "Valida credenciales con `bcrypt.compare` y guarda el `idUsuario` en las variables de la colección.\n\n**401** si el correo no existe o la contraseña es incorrecta.\n\nOjo: los usuarios heredados del dump guardan la contraseña en texto plano y siempre fallan. `eilyn.angarita@correo.com` / `123456` sí funciona."
+            "description": "Valida credenciales con `bcrypt.compare` y guarda el `token` y el `idUsuario` en las variables de la colección. El resto de la colección usa ese token.\n\n**401** con el mismo mensaje para correo inexistente y contraseña incorrecta (no filtra qué correos existen).\n\nCredenciales de prueba: `eilyn.angarita@correo.com` / `123456` (usuario) y `carlos.ruiz@correo.com` / `123456` (administrador)."
           }
         },
         {
@@ -133,13 +196,28 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/usuarios/{{idUsuario}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "usuarios", "{{idUsuario}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "{{idUsuario}}"
+              ]
             },
-            "description": "Perfil del usuario sin el campo `contrasena` (`attributes: { exclude: ['contrasena'] }`).\n\n**404** si no existe."
+            "description": "Perfil del usuario **del token** (el id de la URL solo puede ser el propio). Sin el campo `contrasena`.\n\n**401** sin token · **403** si pide otro usuario · **404** si no existe."
           }
         },
         {
@@ -166,13 +244,29 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/usuarios/{{idUsuario}}/mascotas",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "usuarios", "{{idUsuario}}", "mascotas"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "{{idUsuario}}",
+                "mascotas"
+              ]
             },
-            "description": "Mascotas del usuario con su historial de cuidados anidado y ordenado por fecha descendente.\n\nEl historial viene bajo la clave **`Cuidados`** (con mayúscula): es el alias que Sequelize genera para el `include` sin `as`. **404** si el usuario no tiene mascotas.\n\nGuarda el `idMascota` de la primera mascota en las variables de la colección."
+            "description": "Mascotas del usuario del token, con el historial de cuidados anidado bajo la clave **`Cuidados`** (alias que Sequelize genera para el `include`).\n\n**401** sin token · **403** si pide otro usuario · **404** si no tiene mascotas.\n\nGuarda el `idMascota` de la primera mascota."
           }
         }
       ]
@@ -201,20 +295,39 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Postman\",\n  \"raza\": \"Mestizo\",\n  \"sexo\": \"M\",\n  \"fecha_nacimiento\": \"2023-05-15\",\n  \"color\": \"Cafe\",\n  \"peso\": 8.50,\n  \"foto\": \"https://ejemplo.com/postman.jpg\",\n  \"id_tipo_mascota\": 1,\n  \"id_usuario\": {{idUsuario}}\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"nombre\": \"Postman\",\n  \"raza\": \"Mestizo\",\n  \"sexo\": \"M\",\n  \"fecha_nacimiento\": \"2023-05-15\",\n  \"color\": \"Cafe\",\n  \"peso\": 8.50,\n  \"foto\": \"https://ejemplo.com/postman.jpg\",\n  \"id_tipo_mascota\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/mascotas",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "mascotas"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mascotas"
+              ]
             },
-            "description": "Obligatorios: `nombre`, `sexo` (`H` o `M`), `id_tipo_mascota` e `id_usuario`.\n\n**400** si falta alguno. Usa el `idUsuario` resuelto por el login."
+            "description": "Obligatorios: `nombre`, `sexo` (`H` o `M`) e `id_tipo_mascota`. El dueño se toma del token, no del cuerpo: `id_usuario` ya no se acepta.\n\n**400** si falta alguno. **401** sin token."
           }
         },
         {
@@ -237,20 +350,40 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"peso\": 9.75,\n  \"color\": \"Negro\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/mascotas/{{idMascotaCreada}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "mascotas", "{{idMascotaCreada}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mascotas",
+                "{{idMascotaCreada}}"
+              ]
             },
-            "description": "Actualiza solo los campos enviados. Requiere haber ejecutado **Mascotas → Crear mascota** (usa `idMascotaCreada`).\n\n**404** si la mascota no existe."
+            "description": "Actualiza solo los campos enviados. `id_usuario` e `id_mascota` se ignoran si vienen en el cuerpo: el dueño no se puede cambiar.\n\nRequiere **Mascotas → Crear mascota**. **404** si la mascota es de otro usuario."
           }
         },
         {
@@ -272,11 +405,27 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/mascotas/{{idMascota}}/cuidados",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "mascotas", "{{idMascota}}", "cuidados"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mascotas",
+                "{{idMascota}}",
+                "cuidados"
+              ]
             },
             "description": "Historial de una mascota con `total_cuidados`.\n\n**404** si la mascota no existe (no consulta los cuidados)."
           }
@@ -299,13 +448,28 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/mascotas/{{idMascotaCreada}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "mascotas", "{{idMascotaCreada}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mascotas",
+                "{{idMascotaCreada}}"
+              ]
             },
-            "description": "Elimina la mascota y, por `ON DELETE CASCADE`, todos sus cuidados.\n\nEjecutalo al final para dejar la base limpia. **404** si ya no existe."
+            "description": "Elimina la mascota y, por `ON DELETE CASCADE`, todos sus cuidados.\n\nEjecutalo al final para dejar la base limpia. **404** si ya no existe o es de otro usuario."
           }
         }
       ]
@@ -334,20 +498,39 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"id_mascota\": {{idMascota}},\n  \"tipo_cuidado\": \"Vacuna\",\n  \"fecha\": \"2026-11-13\",\n  \"detalle\": \"Refuerzo de rabia\",\n  \"proxima_fecha\": \"2027-11-13\",\n  \"responsable\": \"Dra. Gomez\",\n  \"observaciones\": \"Creado desde Postman\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/cuidados",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cuidados"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cuidados"
+              ]
             },
-            "description": "`tipo_cuidado` solo acepta `Vacuna` o `Baño` (ENUM de la tabla).\n\nObligatorios: `id_mascota`, `tipo_cuidado`, `fecha`, `detalle`.\n\n**400** si falta alguno o si `proxima_fecha` es anterior a `fecha`."
+            "description": "`tipo_cuidado` solo acepta `Vacuna` o `Baño` (ENUM de la tabla). Obligatorios: `id_mascota`, `tipo_cuidado`, `fecha`, `detalle`.\n\n**400** si falta alguno o si `proxima_fecha` es anterior a `fecha` · **404** si la mascota es de otro usuario."
           }
         },
         {
@@ -370,20 +553,40 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id_mascota\": {{idMascota}},\n  \"tipo_cuidado\": \"Vacuna\",\n  \"fecha\": \"2026-11-13\",\n  \"detalle\": \"Refuerzo anual de rabia\",\n  \"proxima_fecha\": \"2027-11-13\",\n  \"responsable\": \"Dra. Gomez\",\n  \"observaciones\": \"Actualizado con PUT\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"tipo_cuidado\": \"Vacuna\",\n  \"fecha\": \"2026-11-13\",\n  \"detalle\": \"Refuerzo anual de rabia\",\n  \"proxima_fecha\": \"2027-11-13\",\n  \"responsable\": \"Dra. Gomez\",\n  \"observaciones\": \"Actualizado con PUT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cuidados",
+                "{{idCuidadoCreado}}"
+              ]
             },
-            "description": "Reemplaza el registro completo. Requiere **Cuidados → Crear cuidado**.\n\n**404** si el cuidado no existe."
+            "description": "Reemplaza el registro completo. `id_mascota` ya no se acepta: el cuidado no se puede mover a otra mascota. Requiere **Cuidados → Crear cuidado**.\n\n**404** si el cuidado no existe o es de otro usuario."
           }
         },
         {
@@ -407,18 +610,38 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Accept", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"observaciones\": \"Sin reacciones adversas\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cuidados",
+                "{{idCuidadoCreado}}"
+              ]
             },
             "description": "Actualiza solo los campos enviados. Requiere **Cuidados → Crear cuidado**.\n\n**404** si el cuidado no existe."
           }
@@ -441,11 +664,26 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/cuidados/{{idCuidadoCreado}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "cuidados", "{{idCuidadoCreado}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cuidados",
+                "{{idCuidadoCreado}}"
+              ]
             },
             "description": "Elimina el registro creado por la colección.\n\n**404** si ya no existe."
           }
@@ -476,11 +714,21 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/tipos-mascota",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "tipos-mascota"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tipos-mascota"
+              ]
             },
             "description": "Catálogo de tipos de mascota. La respuesta trae solo `id_tipo_mascota` y `nombre` (el modelo no declara `descripcion`, aunque exista en la tabla)."
           }
@@ -507,11 +755,21 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/tipos-usuario",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "tipos-usuario"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "tipos-usuario"
+              ]
             },
             "description": "Catálogo de tipos de usuario: 1 = Administrador, 2 = Usuario."
           }
@@ -540,11 +798,20 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Accept", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api-docs.json",
-              "host": ["{{baseUrl}}"],
-              "path": ["api-docs.json"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api-docs.json"
+              ]
             },
             "description": "Especificación OpenAPI generada por `swagger-jsdoc`. La UI interactiva está en `{{baseUrl}}/api-docs`."
           }
