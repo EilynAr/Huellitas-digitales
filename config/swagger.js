@@ -15,9 +15,11 @@ const definition = {
     description: [
       'API REST para la gestión de usuarios, mascotas y su historial de cuidados (vacunas y baños).',
       '',
-      '**Sin autenticación por token:** el endpoint de login valida credenciales, pero el resto de rutas no está protegido.',
+      '**Autenticación:** JWT. Hacé `POST /api/usuarios/login` (o el registro) para obtener un `token` y después enviá `Authorization: Bearer <token>`.',
       '',
-      '**Convenciones:** los errores devuelven `error` o `mensaje` junto con `detalle` cuando aplica.'
+      'En Swagger UI: iniciá sesión desde `POST /api/usuarios/login`, copiá el campo `token` de la respuesta y pegalo con el botón **Authorize**.',
+      '',
+      '**Permisos:** cada usuario solo puede ver y modificar sus propias mascotas y cuidados; el dueño sale del token, no del cuerpo de la petición.'
     ].join('\n')
   },
   servers: [
@@ -32,7 +34,17 @@ const definition = {
     { name: 'Cuidados', description: 'Historial de vacunas y baños' },
     { name: 'Catálogos', description: 'Tablas de referencia' }
   ],
+  // Por defecto todas las rutas piden JWT; las públicas lo desactivan con `security: []`
+  security: [{ bearerAuth: [] }],
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Token devuelto por el login o el registro, con 8 horas de validez.'
+      }
+    },
     schemas: {
       Usuario: {
         type: 'object',
@@ -99,6 +111,18 @@ const definition = {
         properties: {
           mensaje: { type: 'string', example: 'Mascota eliminada con éxito' }
         }
+      },
+      Sesion: {
+        type: 'object',
+        properties: {
+          mensaje: { type: 'string', example: 'Inicio de sesión exitoso' },
+          usuario: { $ref: '#/components/schemas/Usuario' },
+          token: {
+            type: 'string',
+            description: 'JWT para el encabezado Authorization, válido 8 horas',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          }
+        }
       }
     },
     responses: {
@@ -107,7 +131,11 @@ const definition = {
         content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } }
       },
       Unauthorized: {
-        description: 'Credenciales inválidas',
+        description: 'Falta el token, es inválido o está vencido. También credenciales incorrectas en el login',
+        content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } }
+      },
+      Forbidden: {
+        description: 'El token es válido pero el recurso pertenece a otro usuario',
         content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } }
       },
       NotFound: {
