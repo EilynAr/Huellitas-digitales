@@ -1,5 +1,8 @@
 // Prueba de stress de la API de Huellitas Digitales con Grafana k6.
 //
+// La API usa JWT: setup() hace login y el token se reutiliza en todas las
+// iteraciones (firmar el token cuesta CPU, no tiene sentido por request).
+//
 // Uso local (k6 instalado):
 //   k6 run k6/api-stress.js
 //
@@ -7,12 +10,12 @@
 //   docker run --rm -v "${PWD}/k6:/scripts" -e BASE_URL=http://host.docker.internal:3000 grafana/k6 run /scripts/api-stress.js
 //
 // Variables de entorno:
-//   BASE_URL            URL base de la API          (por defecto http://localhost:3000)
-//   USUARIO_CORREO      correo del usuario de prueba (por defecto eilyn.angarita@correo.com)
-//   USUARIO_CONTRASENA  contrasena del usuario       (por defecto 123456)
+//   BASE_URL            URL base de la API           (por defecto http://localhost:3000)
+//   USUARIO_CORREO      correo del usuario de prueba  (por defecto eilyn.angarita@correo.com)
+//   USUARIO_CONTRASENA  contrasena del usuario        (por defecto 123456)
 //
 // La prueba es de solo lectura: no crea ni modifica datos. El único POST es el login,
-// que valida credenciales con bcrypt pero no escribe en la base.
+// que valida credenciales con bcrypt y emite un token, pero no escribe en la base.
 
 import http from 'k6/http';
 import { check, group, sleep } from 'k6';
@@ -52,8 +55,8 @@ export const options = {
   }
 };
 
-// Verifica que la API y el usuario de prueba funcionen antes de cargar,
-// y resuelve un id de usuario y de mascota reales para no hardcodear datos.
+// Verifica que la API responda y que el usuario de prueba pueda iniciar sesión.
+// Devuelve el token y los ids reales para no hardcodear datos.
 export function setup() {
   const salud = http.get(`${BASE_URL}/api/tipos-mascota`, {
     tags: { endpoint: 'catalogos' }
@@ -74,13 +77,19 @@ export function setup() {
   if (login.status !== 200) {
     throw new Error(
       `El usuario ${USUARIO_CORREO} no puede iniciar sesión (status ${login.status}). ` +
-        'Recordá que los usuarios heredados del dump tienen la contraseña en texto plano.'
+        'Revisá las credenciales en el README o recargá el dump con docker compose down -v.'
     );
   }
 
+  const token = login.json('token');
   const idUsuario = login.json('usuario.id_usuario');
 
+  if (!token) {
+    throw new Error('El login no devolvió token: revisá JWT_SECRET en .env');
+  }
+
   const mascotas = http.get(`${BASE_URL}/api/usuarios/${idUsuario}/mascotas`, {
+    headers: { Authorization: `Bearer ${token}` },
     tags: { endpoint: 'perfil' }
   });
 
@@ -89,12 +98,17 @@ export function setup() {
   }
 
   return {
+    token,
     idUsuario,
     idMascota: mascotas.json()[0].id_mascota
   };
 }
 
 export default function (datos) {
+  const conToken = {
+    headers: { Authorization: `Bearer ${datos.token}` }
+  };
+
   // Mezcla de lecturas: las de catálogo y perfil son baratas,
   // el login es el endpoint más costoso y por eso pesa menos.
   const tirada = Math.random();
@@ -123,6 +137,7 @@ export default function (datos) {
   } else if (tirada < 0.65) {
     group('perfil', () => {
       const respuesta = http.get(`${BASE_URL}/api/usuarios/${datos.idUsuario}`, {
+        headers: conToken.headers,
         tags: { endpoint: 'perfil' }
       });
 
@@ -134,6 +149,7 @@ export default function (datos) {
   } else if (tirada < 0.85) {
     group('perfil', () => {
       const respuesta = http.get(`${BASE_URL}/api/usuarios/${datos.idUsuario}/mascotas`, {
+        headers: conToken.headers,
         tags: { endpoint: 'perfil' }
       });
 
@@ -145,6 +161,7 @@ export default function (datos) {
   } else if (tirada < 0.93) {
     group('historial', () => {
       const respuesta = http.get(`${BASE_URL}/api/mascotas/${datos.idMascota}/cuidados`, {
+        headers: conToken.headers,
         tags: { endpoint: 'historial' }
       });
 
@@ -163,7 +180,7 @@ export default function (datos) {
 
       check(respuesta, {
         'login responde 200': (r) => r.status === 200,
-        'login devuelve el usuario': (r) => r.json('usuario.id_usuario') !== undefined
+        'login devuelve token': (r) => typeof r.json('token') === 'string'
       });
     });
   }
