@@ -149,90 +149,48 @@
   </div>
 
   <script>
-    // ==========================================
-    // 1. CONECTAR FORMULARIO DE INICIAR SESIÓN
-    // ==========================================
-    const formLogin = document.querySelector('.login-formulario form');
 
-    formLogin.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const correo = document.getElementById('correo').value.trim();
-      const contrasena = document.getElementById('clave').value;
-
+    async function enviar(url, datos) {
       try {
-        const respuesta = await fetch('/api/usuarios/login', {
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ correo, contrasena })
+          body: JSON.stringify(datos)
         });
-
-        const datos = await respuesta.json();
-
-        if (!respuesta.ok) {
-          alert(datos.error || datos.mensaje || 'Error al iniciar sesión');
-          return;
-        }
-
-        localStorage.setItem('usuario', JSON.stringify(datos.usuario));
+        const r = await res.json();
+        if (!res.ok) { alert(r.error || 'No se pudo completar la acción.'); return; }
+        localStorage.setItem('usuario', JSON.stringify(r.usuario));
+        if (r.token) localStorage.setItem('token', r.token);
         window.location.href = 'mascotas.html';
-      } catch (error) {
+      } catch (err) {
         alert('Error de conexión con el servidor.');
-        console.error(error);
+        console.error(err);
       }
+    }
+
+    document.querySelector('.login-formulario form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      enviar('/api/usuarios/login', {
+        correo: document.getElementById('correo').value.trim(),
+        contrasena: document.getElementById('clave').value
+      });
     });
 
-    // ==========================================
-    // 2. CONECTAR MODAL DE CREAR CUENTA (REGISTRO)
-    // ==========================================
-    const formRegistro = document.querySelector('#crear-cuenta form');
-
-    formRegistro.addEventListener('submit', async (e) => {
+    document.querySelector('#crear-cuenta form').addEventListener('submit', (e) => {
       e.preventDefault();
-
-      const nombre = document.getElementById('r-nombre').value.trim();
-      const apellido = document.getElementById('r-apellido').value.trim();
-      const correo = document.getElementById('r-correo').value.trim();
-      const contrasena = document.getElementById('r-clave').value;
-      const confirmar = document.getElementById('r-clave2').value;
-
-      if (contrasena !== confirmar) {
-        alert('Las contraseñas no coinciden. Por favor verifícalas.');
+      if (document.getElementById('r-clave').value !== document.getElementById('r-clave2').value) {
+        alert('Las contraseñas no coinciden.');
         return;
       }
-
-      try {
-        const respuesta = await fetch('/api/usuarios/registro', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            nombre,
-            apellido,
-            correo,
-            contrasena,
-            id_tipo_usuario: 2
-          })
-        });
-
-        const datos = await respuesta.json();
-
-        if (!respuesta.ok) {
-          alert(datos.error || datos.mensaje || 'No se pudo crear la cuenta');
-          return;
-        }
-
-        localStorage.setItem('usuario', JSON.stringify(datos.usuario));
-        alert('¡Cuenta creada con éxito! Bienvenido/a ' + nombre);
-        window.location.href = 'mascotas.html';
-      } catch (error) {
-        alert('Error de conexión con el servidor.');
-        console.error(error);
-      }
+      enviar('/api/usuarios/registro', {
+        nombre: document.getElementById('r-nombre').value.trim(),
+        apellido: document.getElementById('r-apellido').value.trim(),
+        correo: document.getElementById('r-correo').value.trim(),
+        contrasena: document.getElementById('r-clave').value,
+        id_tipo_usuario: 2
+      });
     });
+
   </script>
-</body>
-</html>
-
-
 </body>
 </html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mascota · Huellitas Digitales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- ===== Barra de navegación ===== -->
+  <header class="navbar">
+    <div class="navbar-contenido">
+      <div class="navbar-izquierda">
+        <a href="mascotas.html" class="logo">
+          <span class="logo-icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6B4FB3" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg></span>
+          <span class="logo-texto">Huellitas Digitales</span>
+        </a>
+        <nav aria-label="Menú principal">
+          <ul class="navbar-menu">
+            <li><a href="mascotas.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="#6B4FB3" aria-hidden="true"><ellipse cx="5.5" cy="10.5" rx="2.2" ry="2.8"/><ellipse cx="9.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10.5" rx="2.2" ry="2.8"/><path d="M12 11.5c-3.3 0-6 3.7-6 6.4 0 1.7 1.3 2.6 2.8 2.6 1.3 0 2-.7 3.2-.7s1.9.7 3.2.7c1.5 0 2.8-.9 2.8-2.6 0-2.7-2.7-6.4-6-6.4z"/></svg>Mis mascotas</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <details class="cuenta">
+        <summary aria-label="Menú de la cuenta">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#FFE6D5"/><path d="M6 34.5c2.5-6 8-8.5 14-8.5s11.5 2.5 14 8.5a20 20 0 0 1-28 0z" fill="#C9B8F0"/><circle cx="20" cy="17" r="7.5" fill="#F2C9A5"/><path d="M12.3 16.5c0-5.5 3.5-8.5 7.7-8.5s7.7 3 7.7 8.5c-1.5-2.5-4-4-7.7-4.2-3.7.2-6.2 1.7-7.7 4.2z" fill="#5A3E2B"/><circle cx="17.3" cy="18" r="1" fill="#3A2E2A"/><circle cx="22.7" cy="18" r="1" fill="#3A2E2A"/><path d="M18 21q2 1.5 4 0" stroke="#3A2E2A" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
+          <span></span>
+          <svg class="flecha" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="cuenta-menu">
+          <div class="cuenta-datos">
+            <svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#FFE6D5"/><path d="M6 34.5c2.5-6 8-8.5 14-8.5s11.5 2.5 14 8.5a20 20 0 0 1-28 0z" fill="#C9B8F0"/><circle cx="20" cy="17" r="7.5" fill="#F2C9A5"/><path d="M12.3 16.5c0-5.5 3.5-8.5 7.7-8.5s7.7 3 7.7 8.5c-1.5-2.5-4-4-7.7-4.2-3.7.2-6.2 1.7-7.7 4.2z" fill="#5A3E2B"/><circle cx="17.3" cy="18" r="1" fill="#3A2E2A"/><circle cx="22.7" cy="18" r="1" fill="#3A2E2A"/><path d="M18 21q2 1.5 4 0" stroke="#3A2E2A" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
+            <div>
+              <strong></strong>
+              <span></span>
+            </div>
+          </div>
+          <a href="#">
+            <span class="icono-cuadro bg-durazno"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A4A1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            Mi perfil
+          </a>
+          <a href="index.html">
+            <span class="icono-cuadro bg-rosa"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9B2C4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg></span>
+            Cerrar sesión
+          </a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <!-- ===== Contenido ===== -->
+  <main class="contenido">
+    <a href="mascotas.html" class="volver">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      Mis mascotas
+    </a>
+
+    <!-- ===== Ficha (se llena con JavaScript) ===== -->
+    <section class="ficha">
+      <div class="ficha-foto"></div>
+      <div class="ficha-datos">
+        <div>
+          <h1></h1>
+          <span class="etiqueta"></span>
+        </div>
+        <dl></dl>
+        <a href="mascotas.html#registrar-mascota" class="btn btn-secundario">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Editar datos o foto
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== Próximos cuidados (se muestra solo si hay) ===== -->
+    <section class="pendientes" aria-labelledby="titulo-pendientes" style="display: none;">
+      <h2 id="titulo-pendientes">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        Próximos cuidados
+      </h2>
+      <ul></ul>
+    </section>
+
+    <div class="cuidados-layout">
+
+      <!-- ===== Historial ===== -->
+      <section class="historial" aria-labelledby="titulo-historial">
+        <div class="historial-cabecera">
+          <h2 id="titulo-historial">Vacunas y baños</h2>
+          <nav class="pestanas" aria-label="Filtrar cuidados">
+            <a href="#" class="tab-todos">Todos <span>0</span></a>
+            <a href="#" class="tab-vacunas">Vacunas <span>0</span></a>
+            <a href="#" class="tab-banos">Baños <span>0</span></a>
+          </nav>
+        </div>
+
+        <ul class="lista-cuidados"></ul>
+      </section>
+
+      <!-- ===== Formulario: nuevo cuidado ===== -->
+      <section id="nuevo-cuidado" class="panel-form" aria-labelledby="titulo-nuevo">
+        <h2 id="titulo-nuevo">Agregar registro</h2>
+
+        <form class="form-cuidado">
+          <fieldset class="selector-cuidado">
+            <legend class="sr-only">¿Qué vas a registrar?</legend>
+            <label>
+              <input type="radio" name="tipo_cuidado" value="Vacuna" id="t-vacuna" checked>
+              <span>Vacuna</span>
+            </label>
+            <label>
+              <input type="radio" name="tipo_cuidado" value="Baño" id="t-bano">
+              <span>Baño</span>
+            </label>
+          </fieldset>
+
+          <div class="campo">
+            <label for="c-detalle">
+              <span class="solo-vacuna">Nombre de la vacuna</span>
+              <span class="solo-bano">Tipo de baño</span>
+            </label>
+            <input id="c-detalle" name="detalle" type="text" maxlength="80" list="sugerencias" placeholder="Ej. Rabia · Antipulgas" required>
+            <datalist id="sugerencias">
+              <option value="Rabia"><option value="Parvovirus"><option value="Moquillo"><option value="Triple felina">
+              <option value="Leucemia felina"><option value="Desparasitación">
+              <option value="Normal"><option value="Antipulgas"><option value="Medicado"><option value="Seco">
+            </datalist>
+          </div>
+
+          <div class="fila-2">
+            <div class="campo">
+              <label for="c-fecha">
+                <span class="solo-vacuna">Fecha de aplicación</span>
+                <span class="solo-bano">Fecha del baño</span>
+              </label>
+              <input id="c-fecha" name="fecha" type="date" required>
+            </div>
+            <div class="campo">
+              <label for="c-proxima">
+                <span class="solo-vacuna">Próxima dosis</span>
+                <span class="solo-bano">Próximo baño</span>
+                <span class="opcional">· opcional</span>
+              </label>
+              <input id="c-proxima" name="proxima_fecha" type="date">
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="c-responsable">
+              <span class="solo-vacuna">Veterinario</span>
+              <span class="solo-bano">Lugar</span>
+              <span class="opcional">· opcional</span>
+            </label>
+            <input id="c-responsable" name="responsable" type="text" maxlength="80" placeholder="Ej. Dra. Rojas · Peluquería canina">
+          </div>
+
+          <div class="campo">
+            <label for="c-obs">Observaciones <span class="opcional">· opcional</span></label>
+            <textarea id="c-obs" name="observaciones" rows="3" maxlength="255" placeholder="Reacciones, productos usados, etc."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primario btn-bloque">Guardar registro</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+
+    // Envía la petición con el token de sesión; si el servidor responde 401, regresa al login
+    function authFetch(url, opciones = {}) {
+      const token = localStorage.getItem('token');
+      return fetch(url, {
+        ...opciones,
+        headers: { ...(opciones.headers || {}), 'Authorization': 'Bearer ' + token }
+      }).then(res => {
+        if (res.status === 401) {
+          localStorage.removeItem('usuario');
+          localStorage.removeItem('token');
+          window.location.href = 'index.html';
+        }
+        return res;
+      });
+    }
+
+    const esc = (t) => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    const svg = (p, s = 16) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+    const ICONO_VACUNA = svg('<path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/>', 22);
+    const ICONO_BANO = svg('<path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.7 3 4 3.7 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M10 5 8 7"/><path d="M2 12h20"/><path d="M7 19v2"/><path d="M17 19v2"/>', 22);
+    const ICONO_BORRAR = svg('<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/>');
+
+    const tiposInfo = {
+      1: { nombre: 'Perro', clase: 'tipo-perro', svg: '<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="14" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(20 14 28)"/><ellipse cx="50" cy="28" rx="9" ry="16" fill="#C9A27E" transform="rotate(-20 50 28)"/><circle cx="32" cy="34" r="20" fill="#F2D7B6"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#FFF3E4"/><circle cx="25" cy="31" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="31" r="2.6" fill="#3A2E2A"/><ellipse cx="32" cy="39" rx="4" ry="3" fill="#3A2E2A"/><path d="M32 42v3M28 46q4 3 8 0" stroke="#3A2E2A" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>' },
+      2: { nombre: 'Gato', clase: 'tipo-gato', svg: '<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30 14 8 28 18Z" fill="#B9B3C9"/><path d="M52 30 50 8 36 18Z" fill="#B9B3C9"/><path d="M15 26 16 13 25 19Z" fill="#F6C6D0"/><path d="M49 26 48 13 39 19Z" fill="#F6C6D0"/><circle cx="32" cy="36" r="20" fill="#D9D4E6"/><ellipse cx="25" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><ellipse cx="39" cy="34" rx="2.6" ry="3.4" fill="#3A2E2A"/><path d="M30 40h4l-2 2.5Z" fill="#E68FA3"/><path d="M32 42.5q-3 3-6 1M32 42.5q3 3 6 1" stroke="#3A2E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>' },
+      3: { nombre: 'Ave', clase: 'tipo-ave', svg: '<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><path d="M30 14q2-6 6-4" stroke="#E7B94A" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="32" cy="34" r="20" fill="#FBE7A1"/><ellipse cx="22" cy="40" rx="8" ry="11" fill="#F5D46E" transform="rotate(25 22 40)"/><circle cx="37" cy="29" r="2.6" fill="#3A2E2A"/><path d="M44 32l9 3-9 3Z" fill="#F4A261"/><circle cx="40" cy="38" r="3" fill="#F7B9C4"/></svg>' },
+      4: { nombre: 'Roedor', clase: 'tipo-roedor', svg: '<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><circle cx="18" cy="18" r="7" fill="#E8B796"/><circle cx="46" cy="18" r="7" fill="#E8B796"/><ellipse cx="32" cy="36" rx="22" ry="20" fill="#F3CDB1"/><ellipse cx="32" cy="42" rx="14" ry="11" fill="#FFF3E4"/><circle cx="25" cy="32" r="2.6" fill="#3A2E2A"/><circle cx="39" cy="32" r="2.6" fill="#3A2E2A"/></svg>' },
+      5: { nombre: 'Otro', clase: 'tipo-otro', svg: '<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><path d="M46 32 60 20v24Z" fill="#9FD3E6"/><ellipse cx="30" cy="32" rx="22" ry="15" fill="#BFE6F2"/><circle cx="17" cy="29" r="2.6" fill="#3A2E2A"/></svg>' }
+    };
+
+    const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+    const idMascota = Number(new URLSearchParams(location.search).get('id')) || 0;
+
+    // Fecha de hoy en hora local (toISOString usa UTC y puede marcar otro día)
+    function hoyLocal() {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 10);
+    }
+    const hoy = hoyLocal();
+    const formatear = (f) => f.split('-').reverse().join('/');
+
+    function iniciar() {
+      document.querySelector('.cuenta summary span').textContent = usuario.nombre;
+      document.querySelector('.cuenta-datos strong').textContent = usuario.nombre + ' ' + (usuario.apellido || '');
+      document.querySelector('.cuenta-datos span').textContent = usuario.correo;
+      document.querySelector('a[href="index.html"]').addEventListener('click', () => {
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('token');
+      });
+
+      const inputFecha = document.getElementById('c-fecha');
+      inputFecha.max = hoy;
+      inputFecha.value = hoy;
+      cargarTodo();
+    }
+
+    async function cargarTodo() {
+      const resM = await authFetch('/api/usuarios/' + usuario.id_usuario + '/mascotas');
+      const lista = resM.ok ? await resM.json() : [];
+      const m = lista.find(x => x.id_mascota === idMascota);
+      if (!m) { window.location.href = 'mascotas.html'; return; }
+      pintarFicha(m);
+
+      const resC = await authFetch('/api/mascotas/' + idMascota + '/cuidados');
+      if (!resC.ok) { alert('No se pudieron cargar los cuidados.'); return; }
+      const { historial } = await resC.json();
+      pintarCuidados(historial);
+    }
+
+    function pintarFicha(m) {
+      const tipo = tiposInfo[m.id_tipo_mascota] || tiposInfo[5];
+      document.title = m.nombre + ' · Huellitas Digitales';
+      const fotoBox = document.querySelector('.ficha-foto');
+      fotoBox.className = 'ficha-foto ' + tipo.clase;
+      fotoBox.innerHTML = m.foto ? '<img class="foto-mascota" src="' + esc(m.foto) + '" alt="Foto de ' + esc(m.nombre) + '">' : tipo.svg;
+      document.querySelector('.ficha-datos h1').textContent = m.nombre;
+      const etq = document.querySelector('.ficha-datos .etiqueta');
+      etq.className = 'etiqueta ' + tipo.clase;
+      etq.textContent = tipo.nombre;
+      document.querySelector('.ficha-datos dl').innerHTML = `
+        <div><dt>Raza</dt><dd>${esc(m.raza || 'Mestizo')}</dd></div>
+        <div><dt>Sexo</dt><dd>${m.sexo === 'H' ? 'Hembra' : (m.sexo === 'M' ? 'Macho' : 'No especificado')}</dd></div>
+        <div><dt>Nacimiento</dt><dd>${m.fecha_nacimiento ? formatear(m.fecha_nacimiento) : 'Sin fecha'}</dd></div>
+        <div><dt>Color</dt><dd>${esc(m.color || 'No especificado')}</dd></div>
+        <div><dt>Peso</dt><dd>${m.peso ? esc(m.peso) + ' kg' : 'No registrado'}</dd></div>`;
+    }
+
+    function pintarCuidados(lista) {
+      const vacunas = lista.filter(c => c.tipo_cuidado === 'Vacuna');
+      const banos = lista.filter(c => c.tipo_cuidado === 'Baño');
+      document.querySelector('.tab-todos span').textContent = lista.length;
+      document.querySelector('.tab-vacunas span').textContent = vacunas.length;
+      document.querySelector('.tab-banos span').textContent = banos.length;
+
+      const proximos = lista.filter(c => c.proxima_fecha && c.proxima_fecha >= hoy);
+      const pendientes = document.querySelector('.pendientes');
+      pendientes.style.display = proximos.length ? 'block' : 'none';
+      pendientes.querySelector('ul').innerHTML = proximos.map(p =>
+        `<li><strong>${esc(p.tipo_cuidado)}: ${esc(p.detalle)}</strong> — ${formatear(p.proxima_fecha)}</li>`).join('');
+
+      const ul = document.querySelector('.lista-cuidados');
+      if (lista.length === 0) {
+        ul.innerHTML = '<li style="padding: 24px; text-align: center; color: #5E5675;">Aún no hay vacunas ni baños registrados para esta mascota.</li>';
+        return;
+      }
+      ul.innerHTML = lista.map(c => {
+        const bano = c.tipo_cuidado === 'Baño';
+        let sub = formatear(c.fecha);
+        if (c.responsable) sub += ' · ' + c.responsable;
+        if (c.proxima_fecha) sub += ' · Próxima: ' + formatear(c.proxima_fecha);
+        return `
+          <li class="cuidado ${bano ? 'es-bano' : 'es-vacuna'}">
+            <span class="cuidado-icono" aria-hidden="true">${bano ? ICONO_BANO : ICONO_VACUNA}</span>
+            <div class="cuidado-texto">
+              <div class="cuidado-titulo">
+                <strong>${esc(c.detalle)}</strong>
+                <span class="etiqueta ${bano ? 'etq-bano' : 'etq-vacuna'}">${esc(c.tipo_cuidado)}</span>
+              </div>
+              <p>${esc(sub)}</p>
+              ${c.observaciones ? `<p class="cuidado-nota">${esc(c.observaciones)}</p>` : ''}
+            </div>
+            <button type="button" class="btn-icono btn-peligro btn-eliminar-cuidado" data-id="${c.id_cuidado}" data-detalle="${esc(c.detalle)}" aria-label="Eliminar registro de ${esc(c.detalle)}">${ICONO_BORRAR}</button>
+          </li>`;
+      }).join('');
+    }
+
+    document.querySelector('.lista-cuidados').addEventListener('click', async (e) => {
+      const btn = e.target.closest('.btn-eliminar-cuidado');
+      if (!btn) return;
+      if (!confirm('¿Eliminar el registro "' + btn.dataset.detalle + '"?')) return;
+      const res = await authFetch('/api/cuidados/' + btn.dataset.id, { method: 'DELETE' });
+      if (!res.ok) { alert('No se pudo eliminar el cuidado.'); return; }
+      await cargarTodo();
+    });
+
+    document.querySelector('.form-cuidado').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const datos = Object.fromEntries(new FormData(f));
+      for (const k in datos) if (datos[k] === '') datos[k] = null;   // '' se envía como null
+      datos.id_mascota = idMascota;
+      try {
+        const res = await authFetch('/api/cuidados', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+        const r = await res.json();
+        if (!res.ok) { alert(r.error || 'Error al guardar el cuidado'); return; }
+        f.reset();
+        const inputFecha = document.getElementById('c-fecha');
+        inputFecha.max = hoy;
+        inputFecha.value = hoy;
+        await cargarTodo();
+      } catch (err) {
+        alert('Error de conexión con el servidor');
+        console.error(err);
+      }
+    });
+
+    if (usuario && idMascota) iniciar(); else window.location.href = 'mascotas.html';
+
+  </script>
+</body>
+</html>

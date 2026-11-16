@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const apiRouter = require('./routes/api');
@@ -12,7 +13,7 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // Permite abrir tus archivos .html desde localhost:3000
+app.use(express.static(path.join(__dirname, 'public'))); // Sirve index.html, mascotas.html, mascota.html y css/ desde public/
 
 // Documentación de la API (Swagger UI) y especificación OpenAPI en JSON
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
