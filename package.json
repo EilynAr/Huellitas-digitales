@@ -35,10 +35,14 @@
     "testMatch": [
       "**/tests/**/*.test.js"
     ],
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ],
     "clearMocks": true,
     "collectCoverageFrom": [
       "app.js",
       "config/swagger.js",
+      "middleware/**/*.js",
       "routes/**/*.js"
     ],
     "coverageDirectory": "coverage",
