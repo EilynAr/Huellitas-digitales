@@ -14,8 +14,9 @@ Backend en Node.js + Express 5 + Sequelize, con MySQL 8.4 ejecutándose en Docke
 | ORM | Sequelize 6 |
 | Base de datos | MySQL 8.4 (`mysql2`) |
 | Contenedor de BD | Docker Compose |
-| Frontend | HTML + CSS estático (`index.html`, `mascotas.html`, `mascota.html`) |
+| Frontend | HTML + CSS estático servido desde `public/` (`index.html`, `mascotas.html`, `mascota.html`) |
 | Hash de contraseñas | bcrypt / bcryptjs |
+| Autenticación | JWT (`jsonwebtoken`, 8 horas, `Authorization: Bearer <token>`) |
 | Documentación | OpenAPI 3.0.3 + Swagger UI (`swagger-jsdoc`, `swagger-ui-express`) |
 | Pruebas | Jest 30 + Supertest 7 (modelos mockeados, sin base de datos) |
 | Pruebas de carga | Grafana k6 |
@@ -71,6 +72,9 @@ Todas se leen desde `.env` (ignorado por Git) y son compartidas por la aplicaci�
 | `DB_HOST` | Host de la base de datos | `127.0.0.1` |
 | `DB_PORT` | Puerto publicado de MySQL | `3306` |
 | `PORT` | Puerto del servidor Express | `3000` |
+| `JWT_SECRET` | Secreto usado para firmar y verificar los tokens | `cambiar-por-un-secreto-largo-y-aleatorio` |
+
+> `JWT_SECRET` **debe cambiarse** en cualquier entorno que no sea local. Si falta, el middleware usa el valor por defecto `clave-de-desarrollo-cambiar`, que está en el código y no protege nada. Cambiarlo invalida todos los tokens emitidos.
 
 > `MYSQL_USER` de la imagen oficial de MySQL no acepta `root`. El usuario `root` del contenedor existe solo para administración; la aplicación usa `DB_USER`.
 
@@ -91,46 +95,50 @@ docker compose up -d
 
 El dump incluye catálogos (`tipo_mascota`, `tipo_usuario`), usuarios, mascotas y cuidados de ejemplo.
 
-| Correo | Contraseña | Tipo |
-| --- | --- | --- |
-| `eilyn.angarita@correo.com` | `123456` | Usuario (hash bcrypt válido) |
-| `carlos.ruiz@correo.com` | `123456` | Administrador |
-| `maria.perez@correo.com` | `123456` | Usuario |
+| Correo | Contraseña | Tipo | Mascotas |
+| --- | --- | --- | --- |
+| `carlos.ruiz@correo.com` | `123456` | Administrador (`id_tipo_usuario = 1`) | 1 |
+| `eilyn.angarita@correo.com` | `123456` | Usuario | 1 |
+| `maria.perez@correo.com` | `123456` | Usuario | 6 |
+| `jose.martinez@correo.com` | `123456` | Usuario | 2 |
+| `ana.gomez@correo.com` | `123456` | Usuario | 1 |
 
-Los usuarios heredados del dump guardan la contraseña en texto plano, por lo que **solo sirven para pruebas**: el login compara con `bcrypt.compare` y fallará para ellos. Los usuarios creados desde `POST /api/usuarios/registro` sí se almacenan con hash.
+Las cinco contraseñas están guardadas como **hash bcrypt** (coste 10) del mismo `123456`, así que el login funciona con todas. Los usuarios nuevos se crean desde `POST /api/usuarios/registro` y siempre con tipo Usuario: el cliente no puede elegir el rol.
+
+> Estas credenciales son datos de prueba de desarrollo. Para producción hay que cambiarlas y definir un `JWT_SECRET` propio.
 
 ---
 
 ## Endpoints de la API
 
-Base: `/api`
+Base: `/api`. Los marcados con 🔒 requieren `Authorization: Bearer <token>`; el resto son públicos.
 
 ### Usuarios
 
 | Método | Ruta | Descripción |
 | --- | --- | --- |
-| `POST` | `/api/usuarios/registro` | Registra un usuario y encripta la contraseña |
-| `POST` | `/api/usuarios/login` | Valida credenciales con bcrypt |
-| `GET` | `/api/usuarios/:id_usuario` | Perfil del usuario (sin contraseña) |
-| `GET` | `/api/usuarios/:id_usuario/mascotas` | Mascotas del usuario con su historial de cuidados |
+| `POST` | `/api/usuarios/registro` | Registra un usuario, encripta la contraseña y devuelve un token |
+| `POST` | `/api/usuarios/login` | Valida credenciales con bcrypt y devuelve un token |
+| `GET` 🔒 | `/api/usuarios/:id_usuario` | Perfil del usuario del token (sin contraseña) |
+| `GET` 🔒 | `/api/usuarios/:id_usuario/mascotas` | Mascotas del token con su historial de cuidados |
 
 ### Mascotas
 
 | Método | Ruta | Descripción |
 | --- | --- | --- |
-| `POST` | `/api/mascotas` | Crea una mascota |
-| `PUT` | `/api/mascotas/:id_mascota` | Actualiza una mascota |
-| `DELETE` | `/api/mascotas/:id_mascota` | Elimina una mascota |
-| `GET` | `/api/mascotas/:id_mascota/cuidados` | Historial de cuidados de la mascota |
+| `POST` 🔒 | `/api/mascotas` | Crea una mascota del usuario autenticado |
+| `PUT` 🔒 | `/api/mascotas/:id_mascota` | Actualiza una mascota propia |
+| `DELETE` 🔒 | `/api/mascotas/:id_mascota` | Elimina una mascota propia |
+| `GET` 🔒 | `/api/mascotas/:id_mascota/cuidados` | Historial de cuidados de una mascota propia |
 
 ### Cuidados
 
 | Método | Ruta | Descripción |
 | --- | --- | --- |
-| `POST` | `/api/cuidados` | Registra una vacuna o baño |
-| `PUT` | `/api/cuidados/:id_cuidado` | Reemplaza un registro de cuidado |
-| `PATCH` | `/api/cuidados/:id_cuidado` | Actualiza campos parciales |
-| `DELETE` | `/api/cuidados/:id_cuidado` | Elimina un registro |
+| `POST` 🔒 | `/api/cuidados` | Registra una vacuna o baño en una mascota propia |
+| `PUT` 🔒 | `/api/cuidados/:id_cuidado` | Reemplaza un registro de cuidado |
+| `PATCH` 🔒 | `/api/cuidados/:id_cuidado` | Actualiza campos parciales |
+| `DELETE` 🔒 | `/api/cuidados/:id_cuidado` | Elimina un registro |
 
 ### Catálogos
 
@@ -142,12 +150,40 @@ Base: `/api`
 ### Ejemplo
 
 ```bash
+# 1. Login: guarda el token de la respuesta
 curl -X POST http://localhost:3000/api/usuarios/login \
   -H "Content-Type: application/json" \
   -d '{"correo":"eilyn.angarita@correo.com","contrasena":"123456"}'
+
+# 2. Usar el token en una ruta protegida
+curl http://localhost:3000/api/usuarios/6/mascotas \
+  -H "Authorization: Bearer <token>"
 ```
 
 > `GET /api/usuarios/:id_usuario/mascotas` anida el historial bajo la clave **`Cuidados`** (con mayúscula inicial): es el alias que Sequelize genera para el `include` al no declararse un `as`. No es `cuidados` en minúscula.
+
+---
+
+## Autenticación (JWT)
+
+El login y el registro devuelven un `token` firmado con `JWT_SECRET`, válido **8 horas**, con el payload `{ id_usuario, id_tipo_usuario }`.
+
+El middleware `middleware/auth.js` valida `Authorization: Bearer <token>` y deja el usuario en `req.usuario`. Sin token, con token vencido o firmado con otro secreto responde:
+
+| Situación | Código | Mensaje |
+| --- | --- | --- |
+| Falta el encabezado o no es `Bearer` | `401` | `Debes iniciar sesión.` |
+| Token inválido o vencido | `401` | `Sesión inválida o vencida. Vuelve a iniciar sesión.` |
+| Credenciales incorrectas en el login | `401` | `Credenciales inválidas.` |
+| Recurso de otro usuario | `403` | `No puedes ver el perfil de otro usuario.` (o el equivalente) |
+
+Tres decisiones de diseño que conviene entender:
+
+1. **El dueño sale del token, nunca del cuerpo.** `POST /api/mascotas` ignora `id_usuario`; `PUT /api/mascotas/:id` ignora `id_usuario` e `id_mascota`. Así nadie puede reasignar una mascota ajena cambiando un JSON.
+2. **El login no filtra qué correos existen.** Correo inexistente y contraseña incorrecta devuelven el mismo mensaje: `Credenciales inválidas.`
+3. **Un recurso ajeno responde `404`, no `403`.** Para mascotas y cuidados, la API se comporta como si no existieran: no confirma la existencia de datos de otro usuario. El `403` queda para el perfil y las listas, donde el id es explícito en la URL.
+
+El registro **siempre** crea tipo Usuario (`id_tipo_usuario = 2`); el rol no se puede elegir desde el cliente.
 
 ---
 
@@ -162,13 +198,14 @@ La API está documentada con **OpenAPI 3.0.3** y se sirve con Swagger UI.
 
 La especificación se arma en tiempo de arranque con `swagger-jsdoc`: la definición base (título, servidores, esquemas y respuestas reutilizables) vive en `config/swagger.js` y cada endpoint se documenta con un bloque `@openapi` encima de su ruta en `routes/api.js`. Al cambiar una ruta hay que actualizar su bloque: la documentación no se genera desde el código, se lee de esos comentarios.
 
-Las 11 rutas documentadas cubren las 14 operaciones registradas (algunos paths comparten `PUT`/`DELETE`/`PATCH`). Las rutas duplicadas del final de `routes/api.js` no se documentan porque nunca se ejecutan.
+Las 11 rutas documentadas cubren las 14 operaciones registradas (algunos paths comparten `PUT`/`DELETE`/`PATCH`). Cada operación declara su `security`: las 4 públicas (registro, login y catálogos) lo desactivan explícitamente y el resto hereda el esquema `bearerAuth`.
 
 ### Probar un endpoint desde Swagger UI
 
 1. Abrir <http://localhost:3000/api-docs>
-2. Desplegar el endpoint (por ejemplo `POST /api/usuarios/login`) y pulsar **Try it out**
-3. Editar el JSON de ejemplo y pulsar **Execute**
+2. Ejecutar `POST /api/usuarios/login` con un usuario de prueba y **copiar el campo `token`** de la respuesta
+3. Pulsar **Authorize** (arriba a la derecha) y pegar el token
+4. Desplegar el endpoint protegido, pulsar **Try it out**, editar el JSON y **Execute**
 
 Los endpoints escriben en la base real del contenedor, no en una copia: los `POST`, `PUT`, `PATCH` y `DELETE` que se ejecutan desde ahí modifican los datos de desarrollo.
 
@@ -184,9 +221,22 @@ npm run test:watch    # modo interactivo
 npm run test:coverage # suite + reporte de cobertura
 ```
 
-**30 pruebas en 3 suites**, agrupadas por dominio: `tests/usuarios.test.js`, `tests/mascotas.test.js` y `tests/cuidados.test.js` (este último cubre también catálogos y la especificación OpenAPI). Cada endpoint tiene su caso feliz y sus ramas de error principales (`400` por datos inválidos, `401` por credenciales, `404` por recurso inexistente y `500` cuando la base falla).
+**52 pruebas en 4 suites**, agrupadas por dominio:
 
-`tests/factories.js` arma instancias falsas de los modelos con la forma que devolvería Sequelize (incluido `toJSON()` y las instancias con `update`/`destroy`).
+| Suite | Qué cubre |
+| --- | --- |
+| `tests/auth.test.js` | Registro, login y el middleware JWT: sin token, token inválido, vencido, firmado con otro secreto |
+| `tests/usuarios.test.js` | Perfil y mascotas del usuario, con el control de permisos (`403` si pide otro) |
+| `tests/mascotas.test.js` | CRUD de mascotas y propiedad del recurso (dueño desde el token) |
+| `tests/cuidados.test.js` | CRUD de cuidados, catálogos y la especificación OpenAPI |
+
+Cada endpoint tiene su caso feliz y sus ramas de error principales (`400` por datos inválidos, `401` por falta de token, `403` por permisos, `404` por recurso inexistente o ajeno, y `500` cuando la base falla).
+
+La infraestructura de las pruebas vive en `tests/helpers/`:
+
+- `modelos.js` — mocks de los modelos y fábricas de instancias falsas con la forma que devolvería Sequelize (`toJSON()`, `update()`, `destroy()`).
+- `auth.js` — firma tokens JWT reales con el secreto de prueba, para no mockear el middleware.
+- `tests/setup.js` — define `JWT_SECRET` **antes** de cargar `app.js`: el middleware lee la variable al importarse.
 
 ### Cobertura
 
@@ -204,21 +254,27 @@ El reporte HTML permite navegar archivo por archivo y ver exactamente qué líne
 | --- | --- | --- | --- | --- |
 | `app.js` | 100% | 100% | 100% | 100% |
 | `config/swagger.js` | 100% | 50% | 100% | 100% |
-| `routes/api.js` | 71.51% | 80% | 77.77% | 71.51% |
-| **Total** | **74.87%** | **78.84%** | **78.94%** | **74.74%** |
+| `middleware/auth.js` | 100% | 87.5% | 100% | 100% |
+| `routes/api.js` | 93.05% | 98.3% | 100% | 92.95% |
+| **Total** | **94.44%** | **95.65%** | **100%** | **94.35%** |
 
 Dos aclaraciones sobre esos números:
 
 - **Los modelos no se cuentan**: se mockean por diseño, así que reportarían 0% sin decir nada útil. `config/bd.js` tampoco se incluye porque solo se ejecuta contra una base real.
-- **Las líneas sin cubrir de `routes/api.js` (632-654, 716-735, 799-827) son las rutas duplicadas del final del archivo**, que nunca se ejecutan. El resto son los `catch` genéricos que devuelven `500`. La documentación de esas rutas duplicadas tampoco se genera en Swagger por el mismo motivo.
+- **Las líneas sin cubrir de `routes/api.js` son los `catch` genéricos que devuelven `500`.** No queda código muerto: las rutas duplicadas que antes inflaban ese listado se eliminaron en la reescritura con JWT.
 
 ### Verificación de que la suite no pasa de casualidad
 
-Se comprobó con una mutación: al invertir la condición de `bcrypt.compare` en el login (`routes/api.js`), 2 pruebas pasaron a rojo. Restaurado el código, vuelven a 30/30 en verde.
+Se comprobó con dos mutaciones sobre `routes/api.js`:
+
+1. **Quitar `verificarToken` de `GET /api/usuarios/:id_usuario`** → 11 pruebas en rojo (todo el bloque del middleware y los permisos).
+2. **Invertir la condición de `bcrypt.compare` en el login** (verificación anterior, con la suite sin JWT) → 2 pruebas en rojo.
+
+En ambos casos, restaurado el código, la suite vuelve a verde:
 
 ```text
-Test Suites: 3 passed, 3 total
-Tests:       30 passed, 30 total
+Test Suites: 4 passed, 4 total
+Tests:       52 passed, 52 total
 ```
 
 ---
@@ -284,7 +340,7 @@ Si un umbral se cruza, k6 termina con código de salida `99` y el run queda como
 | `USUARIO_CORREO` | `eilyn.angarita@correo.com` | Usuario de prueba |
 | `USUARIO_CONTRASENA` | `123456` | Contraseña del usuario |
 
-`setup()` valida que la API responda y que el usuario pueda iniciar sesión; si algo falla, aborta antes de generar carga con un mensaje claro. Los ids de usuario y mascota se resuelven en caliente, no están hardcodeados.
+`setup()` valida que la API responda, hace **login y guarda el token JWT**, y resuelve los ids reales de usuario y mascota. Ese token se reutiliza en todas las iteraciones: firmar un JWT cuesta CPU, no tiene sentido hacerlo por request. Si el login falla, aborta con un mensaje claro antes de generar carga.
 
 ### Cómo leer el resultado
 
@@ -294,7 +350,7 @@ k6 imprime el resumen en consola: `http_reqs` (throughput), `http_req_duration` 
 k6 run --out json=resultado.json k6/api-stress.js
 ```
 
-Referencia medida en local (Docker Desktop, 10 VUs, prueba corta): `p(95)` de 7 ms en catálogos, 12 ms en perfil y 60 ms en login — el login domina por el costo de bcrypt.
+Referencia medida en local (Docker Desktop, 10 VUs, prueba corta): `86/86 checks` en verde, `0%` de errores, `p(95)` global de **10.68 ms** — con el login alrededor de 60 ms por el costo de bcrypt.
 
 ---
 
@@ -316,15 +372,15 @@ La carpeta `postman/` trae la colección completa de la API lista para importar.
 ### Qué incluye
 
 - **Cuerpos completos** en cada `POST`/`PUT`/`PATCH`, con los campos obligatorios y opcionales del modelo.
-- **Cabeceras** `Content-Type: application/json` y `Accept: application/json`.
-- **Tests por request** (`pm.test`): código de estado, forma de la respuesta y, sobre todo, que la contraseña nunca se devuelva.
-- **Encadenado de variables**: el login guarda `idUsuario`, *Mascotas del usuario* guarda `idMascota`, *Crear mascota* guarda `idMascotaCreada` y *Crear cuidado* guarda `idCuidadoCreado`. Ejecutando en orden no hay que tocar nada a mano.
+- **Cabeceras** `Content-Type: application/json`, `Accept: application/json` y `Authorization: Bearer {{token}}` en las 10 peticiones protegidas.
+- **Tests por request** (`pm.test`): código de estado, forma de la respuesta, emisión del token y que la contraseña nunca se devuelva.
+- **Encadenado de variables**: `Login` (o `Registro`) guarda `token` e `idUsuario`, *Mascotas del usuario* guarda `idMascota`, *Crear mascota* guarda `idMascotaCreada` y *Crear cuidado* guarda `idCuidadoCreado`. Ejecutando en orden no hay que tocar nada a mano.
 - **Correo único** por ejecución en el registro (pre-request script con `Date.now()`), para no chocar con el índice `UNIQUE` de `usuario.correo`.
 - **Limpieza**: los `DELETE` de mascota y cuidado borran lo que creó la propia colección.
 
 > El registro sí deja un usuario nuevo (`prueba.<timestamp>@correo.com`), porque la API no expone un endpoint para eliminar usuarios.
 
-Verificado ejecutando las 15 peticiones contra la API real, en orden y con las variables encadenadas: **15/15 OK**.
+Verificado ejecutando las 15 peticiones contra la API real, en orden y con el token encadenado: **15/15 OK**. Además se comprobó que una ruta protegida sin token responde `401`.
 
 ---
 
@@ -335,7 +391,9 @@ Verificado ejecutando las 15 peticiones contra la API real, en orden y con las v
 │   └── huellitas_digitales (1).sql   # Dump de MySQL (init automático del contenedor)
 ├── config/
 │   ├── bd.js                        # Instancia de Sequelize y verificación de conexión
-│   └── swagger.js                   # Definición OpenAPI 3.0.3 + esquemas reutilizables
+│   └── swagger.js                   # Definición OpenAPI 3.0.3, esquemas y esquema bearerAuth
+├── middleware/
+│   └── auth.js                      # firmarToken() y verificarToken() (JWT)
 ├── models/
 │   ├── index.js                     # Carga los modelos y define las asociaciones
 │   ├── Usuario.js                   # tabla: usuario
@@ -344,20 +402,24 @@ Verificado ejecutando las 15 peticiones contra la API real, en orden y con las v
 │   ├── TipoUsuario.js               # tabla: tipo_usuario
 │   └── TipoMascota.js               # tabla: tipo_mascota
 ├── routes/
-│   └── api.js                       # Todos los endpoints REST + anotaciones @openapi
+│   └── api.js                       # Los 14 endpoints REST + anotaciones @openapi
 ├── tests/
-│   ├── factories.js                 # Instancias falsas de los modelos
-│   ├── usuarios.test.js
-│   ├── mascotas.test.js
-│   └── cuidados.test.js             # Cuidados, catálogos y especificación OpenAPI
+│   ├── setup.js                     # Define JWT_SECRET antes de cargar la app
+│   ├── helpers/
+│   │   ├── auth.js                  # Firma tokens reales para las pruebas
+│   │   └── modelos.js               # Mocks de Sequelize e instancias falsas
+│   ├── auth.test.js                 # Registro, login y middleware JWT
+│   ├── usuarios.test.js             # Perfil y mascotas, con permisos
+│   ├── mascotas.test.js             # CRUD de mascotas
+│   └── cuidados.test.js             # Cuidados, catálogos y OpenAPI
+├── public/
+│   ├── index.html / mascotas.html / mascota.html
+│   └── css/estilos.css
 ├── k6/
 │   └── api-stress.js                # Prueba de stress (solo lectura, 200 VUs de pico)
 ├── postman/
 │   ├── Huellitas-Digitales.postman_collection.json
 │   └── Huellitas-Local.postman_environment.json
-├── css/
-│   └── estilos.css
-├── index.html / mascotas.html / mascota.html
 ├── app.js                           # Configura Express (middlewares, estáticos, rutas) y se exporta
 ├── index.js                         # Arranque: conecta a MySQL y escucha en el puerto
 ├── docker-compose.yml               # MySQL 8.4 + importación del dump
@@ -377,10 +439,15 @@ Verificado ejecutando las 15 peticiones contra la API real, en orden y con las v
 | Las tablas no existen | El volumen ya existía cuando se agregó el dump | `docker compose down -v && docker compose up -d` |
 | `Cannot find module 'express'` | Faltan dependencias | `npm install` |
 | Error de encoding en los modelos | El archivo debe guardarse en UTF-8 | Verificar en el editor que `models/Cuidado.js` conserva `'Baño'` |
+| Todo responde `401 Debes iniciar sesión.` | Falta el encabezado o el token expiró (8 h) | Volver a hacer login y usar el `token` nuevo |
+| Todo responde `401 Sesión inválida o vencida.` | `JWT_SECRET` cambió o el token se firmó en otra instancia | Copiar el `JWT_SECRET` de `.env` (o volver a loguearse) |
+| El login funciona pero `403` en las listas | El `id_usuario` de la URL no es el del token | Usar el `id_usuario` que devolvió el login |
+| `403`/`404` al entrar a una mascota | La mascota pertenece a otro usuario | Cada usuario solo ve lo suyo, por diseño |
 
 ---
 
 ## Notas conocidas del código
 
-- `routes/api.js` registra varias rutas duplicadas (`POST /usuarios/login`, `PUT|DELETE /mascotas/:id_mascota`, `PUT /cuidados/:id_cuidado`) y contiene dos `module.exports = router` intermedios. Express usa la primera coincidencia, así que las versiones posteriores son código muerto: no se ejecutan, no se documentan en Swagger y son las principales líneas sin cubrir del reporte de cobertura.
-- No hay autenticación por token: el login devuelve los datos del usuario, pero los endpoints no están protegidos.
+- **Sin roles en la práctica:** existe `id_tipo_usuario` (1 = Administrador, 2 = Usuario) y va en el token, pero ningún endpoint lo usa todavía. El administrador hoy tiene los mismos permisos que un usuario común.
+- **Sin refresh token ni logout del lado del servidor:** el JWT vive 8 horas y no hay lista de revocación. Para invalidar sesiones hay que cambiar `JWT_SECRET`, lo que vence todos los tokens.
+- **El catálogo `tipo_mascota` no expone `descripcion`:** la columna existe en la tabla, pero el modelo Sequelize no la declara, así que no se selecciona.
