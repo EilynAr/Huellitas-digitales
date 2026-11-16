@@ -152,12 +152,17 @@ CREATE TABLE `usuario` (
 -- Dumping data for table `usuario`
 --
 
+--
+-- Usuarios de prueba. Todas las contrasenas son '123456', guardadas como hash bcrypt (coste 10)
+-- para que el login con bcrypt.compare funcione. El id 1 es Administrador (id_tipo_usuario = 1).
+--
+
 INSERT INTO `usuario` (`id_usuario`, `nombre`, `apellido`, `correo`, `contrasena`, `id_tipo_usuario`) VALUES
-(1, 'Carlos', 'Ruiz', 'carlos.ruiz@correo.com', '123456', 1),
-(2, 'María', 'Pérez', 'maria.perez@correo.com', '123456', 2),
-(3, 'José', 'Martínez', 'jose.martinez@correo.com', '123456', 2),
-(4, 'Ana', 'Gómez', 'ana.gomez@correo.com', '123456', 2),
-(6, 'eilyn', 'angarita', 'eilyn.angarita@correo.com', '$2b$10$r2X0tsxVONggVftnOZjMYOfuwUuL4FAc/vO9Uu4W1XUQPSDqTxgua', 2);
+(1, 'Carlos', 'Ruiz', 'carlos.ruiz@correo.com', '$2b$10$9xgZZ/RHwK5uYR7r5tjEuOUTWgdiUcaYlNYr7SRq6h5TU1QfJmqYa', 1),
+(2, 'María', 'Pérez', 'maria.perez@correo.com', '$2b$10$msw8yZmNjvGcAzMgvMya4eJUa.9bR3ZIztin1c8xIEHgiZ807LaEm', 2),
+(3, 'José', 'Martínez', 'jose.martinez@correo.com', '$2b$10$DnWVvMK4qBUZ9PQjtzoKougH6m.Kcnc.bVL8nxc8vaeHC.qwzHJ2q', 2),
+(4, 'Ana', 'Gómez', 'ana.gomez@correo.com', '$2b$10$kGQBDMbKE68dw/oAjqSVgOirArR4lHyblCFbAymQ7xnwLNZ5qk2Mi', 2),
+(6, 'eilyn', 'angarita', 'eilyn.angarita@correo.com', '$2b$10$Qez1TN9J7LwQauTDd/sYd.BwvYC7GvEoCoXf8kKDSQL92PnppUggO', 2);
 
 --
 -- Indexes for dumped tables
