@@ -92,9 +92,9 @@
         <div class="historial-cabecera">
           <h2 id="titulo-historial">Vacunas y baños</h2>
           <nav class="pestanas" aria-label="Filtrar cuidados">
-            <a href="#" class="tab-todos">Todos <span>0</span></a>
-            <a href="#" class="tab-vacunas">Vacunas <span>0</span></a>
-            <a href="#" class="tab-banos">Baños <span>0</span></a>
+            <button type="button" class="tab-todos" data-filtro="todos" aria-pressed="true">Todos <span>0</span></button>
+            <button type="button" class="tab-vacunas" data-filtro="Vacuna" aria-pressed="false">Vacunas <span>0</span></button>
+            <button type="button" class="tab-banos" data-filtro="Baño" aria-pressed="false">Baños <span>0</span></button>
           </nav>
         </div>
 
@@ -204,6 +204,10 @@
     const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
     const idMascota = Number(new URLSearchParams(location.search).get('id')) || 0;
 
+    // Estado del historial y del filtro activo ('todos' | 'Vacuna' | 'Baño')
+    let historial = [];
+    let filtro = 'todos';
+
     // Fecha de hoy en hora local (toISOString usa UTC y puede marcar otro día)
     function hoyLocal() {
       const d = new Date();
@@ -272,12 +276,26 @@
       pendientes.querySelector('ul').innerHTML = proximos.map(p =>
         `<li><strong>${esc(p.tipo_cuidado)}: ${esc(p.detalle)}</strong> — ${formatear(p.proxima_fecha)}</li>`).join('');
 
+      historial = lista;
+      pintarHistorial();
+    }
+
+    // Dibuja en la lista solo los cuidados que pasan el filtro activo
+    function pintarHistorial() {
       const ul = document.querySelector('.lista-cuidados');
-      if (lista.length === 0) {
-        ul.innerHTML = '<li style="padding: 24px; text-align: center; color: #5E5675;">Aún no hay vacunas ni baños registrados para esta mascota.</li>';
+      const visibles = filtro === 'todos'
+        ? historial
+        : historial.filter(c => c.tipo_cuidado === filtro);
+
+      if (visibles.length === 0) {
+        const texto = historial.length === 0
+          ? 'Aún no hay vacunas ni baños registrados para esta mascota.'
+          : (filtro === 'Vacuna' ? 'No hay vacunas registradas todavía.' : 'No hay baños registrados todavía.');
+        ul.innerHTML = '<li class="cuidados-vacio">' + texto + '</li>';
         return;
       }
-      ul.innerHTML = lista.map(c => {
+
+      ul.innerHTML = visibles.map(c => {
         const bano = c.tipo_cuidado === 'Baño';
         let sub = formatear(c.fecha);
         if (c.responsable) sub += ' · ' + c.responsable;
@@ -297,6 +315,17 @@
           </li>`;
       }).join('');
     }
+
+    // Pestañas: Todos / Vacunas / Baños
+    document.querySelector('.pestanas').addEventListener('click', (e) => {
+      const boton = e.target.closest('button[data-filtro]');
+      if (!boton) return;
+      filtro = boton.dataset.filtro;
+      for (const b of document.querySelectorAll('.pestanas button')) {
+        b.setAttribute('aria-pressed', String(b === boton));
+      }
+      pintarHistorial();
+    });
 
     document.querySelector('.lista-cuidados').addEventListener('click', async (e) => {
       const btn = e.target.closest('.btn-eliminar-cuidado');
