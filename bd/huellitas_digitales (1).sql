@@ -153,12 +153,15 @@ CREATE TABLE `usuario` (
 --
 
 --
--- Usuarios de prueba. Todas las contrasenas son '123456', guardadas como hash bcrypt (coste 10)
--- para que el login con bcrypt.compare funcione. El id 1 es Administrador (id_tipo_usuario = 1).
+-- Usuarios de prueba.
+--   admin@admin.com / admin123  -> Administrador (id_tipo_usuario = 1)
+--   el resto / 123456           -> Usuarios normales (id_tipo_usuario = 2)
+-- Todas las contrasenas estan guardadas como hash bcrypt (coste 10) para que
+-- el login con bcrypt.compare funcione.
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nombre`, `apellido`, `correo`, `contrasena`, `id_tipo_usuario`) VALUES
-(1, 'Carlos', 'Ruiz', 'carlos.ruiz@correo.com', '$2b$10$9xgZZ/RHwK5uYR7r5tjEuOUTWgdiUcaYlNYr7SRq6h5TU1QfJmqYa', 1),
+(1, 'Admin', 'Huellitas', 'admin@admin.com', '$2b$10$m0AOoC4xfDrN7/d85fNTUe.mbqucSI2AXUxRmKadxJ2xtt9xMA6Si', 1),
 (2, 'María', 'Pérez', 'maria.perez@correo.com', '$2b$10$msw8yZmNjvGcAzMgvMya4eJUa.9bR3ZIztin1c8xIEHgiZ807LaEm', 2),
 (3, 'José', 'Martínez', 'jose.martinez@correo.com', '$2b$10$DnWVvMK4qBUZ9PQjtzoKougH6m.Kcnc.bVL8nxc8vaeHC.qwzHJ2q', 2),
 (4, 'Ana', 'Gómez', 'ana.gomez@correo.com', '$2b$10$kGQBDMbKE68dw/oAjqSVgOirArR4lHyblCFbAymQ7xnwLNZ5qk2Mi', 2),
