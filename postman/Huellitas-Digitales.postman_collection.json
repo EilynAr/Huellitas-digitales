@@ -174,7 +174,7 @@
                 "login"
               ]
             },
-            "description": "Valida credenciales con `bcrypt.compare` y guarda el `token` y el `idUsuario` en las variables de la colección. El resto de la colección usa ese token.\n\n**401** con el mismo mensaje para correo inexistente y contraseña incorrecta (no filtra qué correos existen).\n\nCredenciales de prueba: `eilyn.angarita@correo.com` / `123456` (usuario) y `carlos.ruiz@correo.com` / `123456` (administrador)."
+            "description": "Valida credenciales con `bcrypt.compare` y guarda el `token` y el `idUsuario` en las variables de la colección. El resto de la colección usa ese token.\n\n**401** con el mismo mensaje para correo inexistente y contraseña incorrecta (no filtra qué correos existen).\n\nCredenciales de prueba: `eilyn.angarita@correo.com` / `123456` (usuario) y `admin@admin.com` / `admin123` (administrador)."
           }
         },
         {

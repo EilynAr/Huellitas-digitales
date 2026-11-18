@@ -97,13 +97,15 @@ El dump incluye catálogos (`tipo_mascota`, `tipo_usuario`), usuarios, mascotas 
 
 | Correo | Contraseña | Tipo | Mascotas |
 | --- | --- | --- | --- |
-| `carlos.ruiz@correo.com` | `123456` | Administrador (`id_tipo_usuario = 1`) | 1 |
+| **`admin@admin.com`** | **`admin123`** | Administrador (`id_tipo_usuario = 1`) | 1 |
 | `eilyn.angarita@correo.com` | `123456` | Usuario | 1 |
 | `maria.perez@correo.com` | `123456` | Usuario | 6 |
 | `jose.martinez@correo.com` | `123456` | Usuario | 2 |
 | `ana.gomez@correo.com` | `123456` | Usuario | 1 |
 
-Las cinco contraseñas están guardadas como **hash bcrypt** (coste 10) del mismo `123456`, así que el login funciona con todas. Los usuarios nuevos se crean desde `POST /api/usuarios/registro` y siempre con tipo Usuario: el cliente no puede elegir el rol.
+Todas las contraseñas están guardadas como **hash bcrypt** (coste 10), así que el login funciona con todas.
+
+**El administrador se crea únicamente en el dump de la base.** No hay forma de crear un admin por la API: `POST /api/usuarios/registro` **siempre** asigna `id_tipo_usuario = 2`, e ignora el `id_tipo_usuario` que venga en el cuerpo (hay un test que lo cubre). Todos los que se registren desde el modal "Crear cuenta" del frontend serán usuarios normales.
 
 > Estas credenciales son datos de prueba de desarrollo. Para producción hay que cambiarlas y definir un `JWT_SECRET` propio.
 
